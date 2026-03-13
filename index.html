@@ -13,86 +13,318 @@
         #mobile-menu {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease-out;
+            transition: max-height 0.4s ease-out;
         }
 
         #mobile-menu.open {
-            max-height: 400px;
+            max-height: 500px;
+        }
+
+        #menu-toggle .bar {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: currentColor;
+            border-radius: 2px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform-origin: center;
+        }
+
+        #menu-toggle.open .bar:nth-child(1) {
+            transform: translateY(6px) rotate(45deg);
+        }
+
+        #menu-toggle.open .bar:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        #menu-toggle.open .bar:nth-child(3) {
+            transform: translateY(-6px) rotate(-45deg);
+        }
+
+        #desktop-nav {
+            display: none;
+        }
+
+        #menu-toggle {
+            display: flex;
+        }
+
+        #start-btn-desktop {
+            display: none;
+        }
+
+        @media (min-width: 1400px) {
+            #desktop-nav {
+                display: flex;
+            }
+
+            #mobile-menu {
+                display: none !important;
+            }
+
+            #menu-toggle {
+                display: none;
+            }
+
+            #start-btn-desktop {
+                display: inline-flex;
+            }
+        }
+
+        .card-icon {
+            display: inline-block;
+            font-size: 2.25rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to bottom, #60a5fa, #1d4ed8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
     </style>
 </head>
 
 <body class="bg-gray-950 text-gray-300 flex flex-col min-h-screen font-sans selection:bg-blue-500/30">
 
+    <!-- NavBar -->
     <header class="bg-gray-900/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
-        <div class="container mx-auto px-3 sm:px-6 py-4 flex items-center justify-between">
+        <div class="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-4">
 
+            <!-- Logo -->
             <div class="flex items-center shrink-0">
                 <a href="/" class="flex items-center group">
                     <img src="Images/logo.png" alt="Human Metrix Logo"
-                        class="h-8 md:h-12 w-auto transition-all duration-300 group-hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]">
-
-                    <h1
-                        class="ml-2 md:ml-4 text-base md:text-2xl font-bold text-white tracking-tight whitespace-nowrap">
+                        class="h-8 md:h-10 w-auto transition-all duration-300 group-hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]">
+                    <h1 class="ml-2 md:ml-3 text-base md:text-xl font-bold text-white tracking-tight whitespace-nowrap">
                         Human <span
                             class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Metrix</span>
                     </h1>
                 </a>
             </div>
 
-            <nav class="hidden lg:flex items-center space-x-8 text-sm font-medium">
-                <a href="#" class="hover:text-blue-400 transition">Reaction Time</a>
-                <a href="#" class="hover:text-blue-400 transition">Memory Test</a>
-                <a href="#" class="hover:text-blue-400 transition">Typing Speed</a>
-                <a href="#" class="hover:text-blue-400 transition">Leaderboard</a>
+            <!-- Desktop Nav -->
+            <nav id="desktop-nav" class="items-center gap-x-5 text-sm font-medium">
+                <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Reaction Time</a>
+                <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Memory Test</a>
+                <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Typing Speed</a>
+                <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Aim Trainer</a>
+                <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Visual Memory</a>
+                <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Number Memory</a>
+                <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Leaderboard</a>
             </nav>
 
-            <div class="flex items-center space-x-2 sm:space-x-4">
-                <button
-                    class="hidden md:inline-flex bg-blue-600 hover:bg-blue-500 text-white px-5 py-2 rounded-full text-sm font-semibold transition shadow-lg shadow-blue-900/20">
+            <!-- Right side: CTA + hamburger -->
+            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                <button id="start-btn-desktop"
+                    class="bg-blue-600 hover:bg-blue-500 text-white px-4 sm:px-5 py-2 rounded-full text-sm font-semibold transition shadow-lg shadow-blue-900/20 whitespace-nowrap">
                     Start Test
                 </button>
 
-                <button id="menu-toggle" class="lg:hidden p-2 text-gray-400 hover:text-white focus:outline-none">
-                    <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-7 sm:w-7" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16m-7 6h7" />
-                    </svg>
+                <!-- Hamburger -->
+                <button id="menu-toggle"
+                    class="flex flex-col justify-center items-center gap-[5px] w-9 h-9 p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none transition-colors">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
                 </button>
             </div>
         </div>
 
-        <div id="mobile-menu" class="lg:hidden bg-gray-900 border-b border-gray-800">
-            <div class="px-6 py-6 space-y-4 font-medium">
-                <a href="#" class="block text-lg hover:text-blue-400 transition">Reaction Time</a>
-                <a href="#" class="block text-lg hover:text-blue-400 transition">Memory Test</a>
-                <a href="#" class="block text-lg hover:text-blue-400 transition">Typing Speed</a>
-                <a href="#" class="block text-lg hover:text-blue-400 transition">Leaderboard</a>
-                <button class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold mt-2">Start Test</button>
+        <!-- Mobile / Tablet Dropdown Menu -->
+        <div id="mobile-menu" class="bg-gray-900/95 backdrop-blur-md border-b border-gray-800">
+            <div class="container mx-auto px-4 sm:px-6 py-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 mb-5">
+                    <a href="#"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+                        <i class="fa-solid fa-bolt-lightning w-5 text-blue-400"></i> Reaction Time
+                    </a>
+                    <a href="#"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+                        <i class="fa-solid fa-brain w-5 text-blue-400"></i> Memory Test
+                    </a>
+                    <a href="#"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+                        <i class="fa-regular fa-keyboard w-5 text-blue-400"></i> Typing Speed
+                    </a>
+                    <a href="#"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+                        <i class="fa-solid fa-crosshairs w-5 text-blue-400"></i> Aim Trainer
+                    </a>
+                    <a href="#"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+                        <i class="fa-solid fa-eye w-5 text-blue-400"></i> Visual Memory
+                    </a>
+                    <a href="#"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+                        <i class="fa-solid fa-hashtag w-5 text-blue-400"></i> Number Memory
+                    </a>
+                    <a href="#"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium sm:col-span-2">
+                        <i class="fa-solid fa-trophy w-5 text-blue-400"></i> Leaderboard
+                    </a>
+                </div>
+                <div class="border-t border-gray-800 pt-4">
+                    <button
+                        class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white px-8 py-2.5 rounded-xl font-bold text-sm transition">
+                        Start Test
+                    </button>
+                </div>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow flex items-center justify-center px-6 py-20">
-        <div class="max-w-4xl w-full text-center">
-            <h1 class="text-5xl sm:text-6xl lg:text-8xl font-black text-white mb-8 tracking-tighter leading-none">
-                Test Your <span
-                    class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Cognitive</span>
-                Limits
-            </h1>
-            <p class="text-gray-400 text-lg md:text-xl max-w-xl mx-auto leading-relaxed opacity-80">
-                Measure reaction time, memory, and focus through professional-grade interactive games.
-            </p>
-            <div class="mt-10">
-                <button
-                    class="bg-white text-gray-950 px-8 py-4 rounded-full font-bold hover:bg-blue-500 hover:text-white transition-all duration-300 shadow-2xl shadow-white/5">
-                    Explore Tests
-                </button>
+    <!-- Main Content -->
+    <main class="flex-grow">
+
+        <!-- Hero Section -->
+        <section class="flex items-center justify-center px-6 pt-20 pb-10">
+            <div class="max-w-4xl w-full text-center">
+                <h1 class="text-5xl sm:text-6xl lg:text-8xl font-black text-white mb-8 tracking-tighter leading-none">
+                    Test Your
+                    <span
+                        class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Cognitive</span>
+                    Limits
+                </h1>
+                <p class="text-gray-400 text-lg md:text-xl max-w-xl mx-auto leading-relaxed opacity-80">
+                    Measure reaction time, memory, and focus through professional-grade interactive games.
+                </p>
+                <div class="mt-10">
+                    <button
+                        class="bg-white text-gray-950 px-8 py-4 rounded-full font-bold hover:bg-blue-500 hover:text-white transition-all duration-300 shadow-2xl shadow-white/5">
+                        Explore Tests
+                    </button>
+                </div>
             </div>
-        </div>
+        </section>
+
+        <!-- Test Cards Section -->
+        <section class="px-6 pb-24 pt-4">
+            <div class="max-w-6xl mx-auto">
+
+                <!-- Section Heading -->
+                <div class="text-center mb-14">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+                        Choose Your
+                        <span class="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+                            Challenge
+                        </span>
+                    </h2>
+                    <p class="text-gray-400 text-lg">Six scientifically-designed tests to benchmark your mind.</p>
+                </div>
+
+                <!-- Cards Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+
+                    <!-- Reaction Time -->
+                    <div
+                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
+                        <div
+                            class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
+                        </div>
+                        <i class="fa-solid fa-bolt-lightning card-icon"></i>
+                        <h3 class="text-white font-semibold text-xl mb-2">Reaction Time</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">Measure how fast you respond to a visual
+                            stimulus.</p>
+                        <span
+                            class="inline-flex items-center gap-2 text-blue-400 text-sm font-medium group-hover:text-blue-300 transition-colors duration-200">
+                            Start Test
+                            <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
+                        </span>
+                    </div>
+
+                    <!-- Memory Test -->
+                    <div
+                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
+                        <div
+                            class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
+                        </div>
+                        <i class="fa-solid fa-brain card-icon"></i>
+                        <h3 class="text-white font-semibold text-xl mb-2">Memory Test</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">Recall a growing sequence of numbers under
+                            pressure.</p>
+                        <span
+                            class="inline-flex items-center gap-2 text-blue-400 text-sm font-medium group-hover:text-blue-300 transition-colors duration-200">
+                            Start Test
+                            <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
+                        </span>
+                    </div>
+
+                    <!-- Typing Speed -->
+                    <div
+                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
+                        <div
+                            class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
+                        </div>
+                        <i class="fa-regular fa-keyboard card-icon"></i>
+                        <h3 class="text-white font-semibold text-xl mb-2">Typing Speed</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">Test your WPM and accuracy against the
+                            clock.</p>
+                        <span
+                            class="inline-flex items-center gap-2 text-blue-400 text-sm font-medium group-hover:text-blue-300 transition-colors duration-200">
+                            Start Test
+                            <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
+                        </span>
+                    </div>
+
+                    <!-- Aim Trainer -->
+                    <div
+                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
+                        <div
+                            class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
+                        </div>
+                        <i class="fa-solid fa-crosshairs card-icon"></i>
+                        <h3 class="text-white font-semibold text-xl mb-2">Aim Trainer</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">Hit as many targets as possible in 30
+                            seconds.</p>
+                        <span
+                            class="inline-flex items-center gap-2 text-blue-400 text-sm font-medium group-hover:text-blue-300 transition-colors duration-200">
+                            Start Test
+                            <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
+                        </span>
+                    </div>
+
+                    <!-- Visual Memory -->
+                    <div
+                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
+                        <div
+                            class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
+                        </div>
+                        <i class="fa-solid fa-eye card-icon"></i>
+                        <h3 class="text-white font-semibold text-xl mb-2">Visual Memory</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">Remember and reproduce an increasingly
+                            complex grid.</p>
+                        <span
+                            class="inline-flex items-center gap-2 text-blue-400 text-sm font-medium group-hover:text-blue-300 transition-colors duration-200">
+                            Start Test
+                            <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
+                        </span>
+                    </div>
+
+                    <!-- Number Memory -->
+                    <div
+                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
+                        <div
+                            class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
+                        </div>
+                        <i class="fa-solid fa-hashtag card-icon"></i>
+                        <h3 class="text-white font-semibold text-xl mb-2">Number Memory</h3>
+                        <p class="text-gray-400 text-sm leading-relaxed mb-6">Push the limits of your short-term digit
+                            recall.</p>
+                        <span
+                            class="inline-flex items-center gap-2 text-blue-400 text-sm font-medium group-hover:text-blue-300 transition-colors duration-200">
+                            Start Test
+                            <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
     </main>
 
+    <!-- Footer -->
     <footer class="bg-gray-950 border-t border-gray-900 pt-20 pb-10">
         <div class="container mx-auto px-6">
 
@@ -156,19 +388,31 @@
                 <div class="text-gray-600 text-[11px] uppercase tracking-widest font-medium">
                     © 2026 Human Metrix // All Rights Reserved
                 </div>
-
-                <div class="flex items-center space-x-6">
-                    <a href="#" class="p-2 bg-gray-900 rounded-md hover:bg-blue-600 transition-colors group">
-                        <span class="sr-only">Twitter</span>
-                        <div class="w-4 h-4 bg-gray-600 group-hover:bg-white rounded-sm"></div>
+                <div class="flex items-center space-x-3">
+                    <a href="#"
+                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+                        aria-label="Twitter / X">
+                        <i class="fa-brands fa-x-twitter text-gray-500 group-hover:text-white text-sm"></i>
                     </a>
-                    <a href="#" class="p-2 bg-gray-900 rounded-md hover:bg-blue-600 transition-colors group">
-                        <span class="sr-only">Discord</span>
-                        <div class="w-4 h-4 bg-gray-600 group-hover:bg-white rounded-sm"></div>
+                    <a href="#"
+                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+                        aria-label="Discord">
+                        <i class="fa-brands fa-discord text-gray-500 group-hover:text-white text-sm"></i>
                     </a>
-                    <a href="#" class="p-2 bg-gray-900 rounded-md hover:bg-blue-600 transition-colors group">
-                        <span class="sr-only">GitHub</span>
-                        <div class="w-4 h-4 bg-gray-600 group-hover:bg-white rounded-sm"></div>
+                    <a href="#"
+                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+                        aria-label="GitHub">
+                        <i class="fa-brands fa-github text-gray-500 group-hover:text-white text-sm"></i>
+                    </a>
+                    <a href="#"
+                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+                        aria-label="Instagram">
+                        <i class="fa-brands fa-instagram text-gray-500 group-hover:text-white text-sm"></i>
+                    </a>
+                    <a href="#"
+                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+                        aria-label="Facebook">
+                        <i class="fa-brands fa-facebook text-gray-500 group-hover:text-white text-sm"></i>
                     </a>
                 </div>
             </div>
@@ -176,6 +420,7 @@
     </footer>
 
     <script src="script.js"></script>
+
 </body>
 
 </html>
