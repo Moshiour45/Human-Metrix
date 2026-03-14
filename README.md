@@ -19,14 +19,15 @@ You will need [Node.js](https://nodejs.org/) and [npm](https://www.npmjs.com/) (
     ```sh
     npm install
     ```
+4. Create a folder named **dist** and  under that folder create a file **style.css**.
 
-4.  **Build the CSS:**
+5.  **Build the CSS:**
     The project uses Tailwind CSS for styling. Run the following command to compile the `src/input.css` file into `output.css`. The `--watch` flag will automatically recompile the CSS when you make changes to the input file or your Tailwind configuration.
     ```sh
     npm run build
     ```
 
-5.  **Run the application:**
+6.  **Run the application:**
     Open the `index.html` file in your preferred web browser to view and interact with the application.
 
 ---
