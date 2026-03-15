@@ -184,42 +184,41 @@
                 <div class="flex flex-col items-center text-center mb-6 sm:mb-10 gap-3">
                     <div>
                         <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight mb-2">
-                            Reaction <span
-                                class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Time</span>
+                            Memory <span
+                                class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Test</span>
                         </h1>
                         <p class="text-sm sm:text-base text-gray-500 font-medium tracking-wide">
-                            When the box turns <span
-                                class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700 font-semibold">Blue</span>,
-                            Click.
+                            <span
+                                class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700 font-semibold">Memorize</span>
+                            The Pattern.
                         </p>
                     </div>
                 </div>
-                <!-- Stats Row (above the box) -->
-                <div class="flex items-center justify-between gap-3 mb-4 sm:mb-5">
 
-                    <!-- Stats -->
-                    <div class="flex items-center gap-4 sm:gap-6 lg:gap-10">
-                        <div>
-                            <p
-                                class="text-xs sm:text-xl font-bold uppercase tracking-widest text-gray-600 mb-0.5 sm:mb-1">
-                                Last</p>
-                            <p id="stat-last" class="text-base sm:text-xl font-black text-white">--</p>
+                <!-- Stats Row -->
+                <div class="flex items-center justify-between gap-2 mb-4 sm:mb-5">
+
+                    <!-- Stats Pill -->
+                    <div
+                        class="flex items-stretch bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shrink-0 min-w-0">
+                        <div class="flex flex-col items-center justify-center px-3 sm:px-6 py-2.5 gap-0.5">
+                            <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Round
+                            </p>
+                            <p id="stat-round" class="text-sm sm:text-lg font-black text-white">1</p>
                         </div>
-                        <div class="w-px h-7 sm:h-8 bg-gray-800"></div>
-                        <div>
-                            <p
-                                class="text-xs sm:text-xl font-bold uppercase tracking-widest text-gray-600 mb-0.5 sm:mb-1">
-                                Best</p>
+                        <div class="w-px bg-gray-800"></div>
+                        <div class="flex flex-col items-center justify-center px-3 sm:px-6 py-2.5 gap-0.5">
+                            <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Best
+                            </p>
                             <p id="stat-best"
-                                class="text-base sm:text-xl font-black text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-600">
+                                class="text-sm sm:text-lg font-black text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-600">
                                 --</p>
                         </div>
-                        <div class="w-px h-7 sm:h-8 bg-gray-800"></div>
-                        <div>
-                            <p
-                                class="text-xs sm:text-xl font-bold uppercase tracking-widest text-gray-600 mb-0.5 sm:mb-1">
-                                Tries</p>
-                            <p id="stat-tries" class="text-base sm:text-xl font-black text-white">0</p>
+                        <div class="w-px bg-gray-800"></div>
+                        <div class="flex flex-col items-center justify-center px-3 sm:px-6 py-2.5 gap-0.5">
+                            <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Score
+                            </p>
+                            <p id="stat-score" class="text-sm sm:text-lg font-black text-white">0</p>
                         </div>
                     </div>
 
@@ -235,7 +234,7 @@
                     </button>
 
                 </div>
-
+                
                 <!-- Game Box (Clickable) -->
                 <button id="game-box"
                     class="w-full rounded-2xl border border-gray-800 bg-gradient-to-b from-gray-900 to-gray-950 p-2 sm:p-3 shadow-2xl cursor-pointer hover:border-gray-700 transition-all duration-200 text-left">
@@ -243,24 +242,59 @@
                         style="height: clamp(260px, 45vh, 520px);">
 
                         <!-- Idle State -->
-                        <div id="idle-state" class="flex flex-col items-center text-center">
-                            <p class="text-gray-500 text-xl sm:text-xl lg:text-2xl font-medium tracking-wide">
+                        <div id="idle-state" class="flex flex-col items-center gap-6">
+                            <!-- Decorative 4x4 grid -->
+                            <div class="grid grid-cols-4 gap-2 pointer-events-none">
+                                <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-gray-900 border border-gray-800"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-gray-900 border border-gray-800"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-gray-900 border border-gray-800"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-gray-900 border border-gray-800"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-gray-900 border border-gray-800"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-gray-900 border border-gray-800"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-gray-900 border border-gray-800"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-gray-900 border border-gray-800"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                            </div>
+                            <p class="text-gray-500 text-sm sm:text-base lg:text-lg font-medium tracking-wide">
                                 Click anywhere to start the game
                             </p>
                         </div>
 
                         <!-- Result State (hidden by default) -->
-                        <div id="result-state" class="hidden flex-col items-center text-center">
+                        <div id="result-state" class="hidden flex-col items-center text-center gap-3">
                             <p id="reaction-number"
-                                class="text-7xl sm:text-8xl lg:text-9xl font-black text-white tabular-nums tracking-tighter leading-none mb-2 sm:mb-3">
-                                413
+                                class="text-7xl sm:text-8xl lg:text-9xl font-black text-white tabular-nums tracking-tighter leading-none">
+                                7
                             </p>
-                            <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-4 sm:mb-6">
-                                Milliseconds
+                            <p class="text-xs font-semibold uppercase tracking-widest text-gray-500">
+                                Correct Tiles
                             </p>
                             <span id="perf-badge"
                                 class="px-4 sm:px-5 py-1 sm:py-1.5 rounded-full text-xs font-black uppercase tracking-widest border border-red-900 bg-red-950 text-red-400">
-                                Slow
+                                Try Again
                             </span>
                         </div>
 
