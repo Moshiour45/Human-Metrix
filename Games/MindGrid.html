@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Human Metrix - MindGrid</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="../dist/style.css">
+    <style>
+        #mobile-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+
+        #mobile-menu.open {
+            max-height: 500px;
+        }
+
+        #menu-toggle .bar {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: currentColor;
+            border-radius: 2px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform-origin: center;
+        }
+
+        #menu-toggle.open .bar:nth-child(1) {
+            transform: translateY(6px) rotate(45deg);
+        }
+
+        #menu-toggle.open .bar:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        #menu-toggle.open .bar:nth-child(3) {
+            transform: translateY(-6px) rotate(-45deg);
+        }
+
+        #desktop-nav {
+            display: none;
+        }
+
+        #menu-toggle {
+            display: flex;
+        }
+
+        #start-btn-desktop {
+            display: none;
+        }
+
+        @media (min-width: 1400px) {
+            #desktop-nav {
+                display: flex;
+            }
+
+            #mobile-menu {
+                display: none !important;
+            }
+
+            #menu-toggle {
+                display: none;
+            }
+
+            #start-btn-desktop {
+                display: inline-flex;
+            }
+        }
+
+        .card-icon {
+            display: inline-block;
+            font-size: 2.25rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to bottom, #60a5fa, #1d4ed8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-950 text-gray-300 flex flex-col min-h-screen font-sans selection:bg-blue-500/30">
+
+    <!-- NavBar -->
+    <header class="bg-gray-900/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-4">
+
+            <!-- Logo -->
+            <div class="flex items-center shrink-0">
+                <a href="../index.html" class="flex items-center group">
+                    <img src="../Images/logo.png" alt="Human Metrix Logo"
+                        class="h-8 md:h-10 w-auto transition-all duration-300 group-hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]">
+                    <h1 class="ml-2 md:ml-3 text-base md:text-xl font-bold text-white tracking-tight whitespace-nowrap">
+                        Human <span
+                            class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Metrix</span>
+                    </h1>
+                </a>
+            </div>
+
+            <!-- Desktop Nav -->
+            <nav id="desktop-nav" class="items-center gap-x-5 text-sm font-medium">
+                <a href="../index.html" class="hover:text-blue-400 transition whitespace-nowrap">Home</a>
+                <a href="ReactionTime.html" class="hover:text-blue-400 transition whitespace-nowrap">Reaction Time</a>
+                <a href="MindGrid.html" class="hover:text-blue-400 transition whitespace-nowrap">Mind Grid</a>
+                <a href="TypingSpeed.html" class="hover:text-blue-400 transition whitespace-nowrap">Typing Speed</a>
+                <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Aim Trainer</a>
+                <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Visual Memory</a>
+                <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Number Memory</a>
+            </nav>
+
+            <!-- Right side: CTA + hamburger -->
+            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                <button id="start-btn-desktop"
+                    class="bg-blue-600 hover:bg-blue-500 text-white px-4 sm:px-5 py-2 rounded-full text-sm font-semibold transition shadow-lg shadow-blue-900/20 whitespace-nowrap">
+                    Start Test
+                </button>
+
+                <!-- Hamburger -->
+                <button id="menu-toggle"
+                    class="flex flex-col justify-center items-center gap-[5px] w-9 h-9 p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none transition-colors">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile / Tablet Dropdown Menu -->
+        <div id="mobile-menu" class="bg-gray-900/95 backdrop-blur-md border-b border-gray-800">
+            <div class="container mx-auto px-4 sm:px-6 py-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 mb-5">
+                    <a href="../index.html"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium sm:col-span-2">
+                        <i class="fa-solid fa-house w-5 text-blue-400"></i> Home
+                    </a>
+                    <a href="ReactionTime.html"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+                        <i class="fa-solid fa-bolt-lightning w-5 text-blue-400"></i> Reaction Time
+                    </a>
+                    <a href="MindGrid.html"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+                        <i class="fa-solid fa-brain w-5 text-blue-400"></i> Mind Grid
+                    </a>
+                    <a href="TypingSpeed.html"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+                        <i class="fa-regular fa-keyboard w-5 text-blue-400"></i> Typing Speed
+                    </a>
+                    <a href="#"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+                        <i class="fa-solid fa-crosshairs w-5 text-blue-400"></i> Aim Trainer
+                    </a>
+                    <a href="#"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+                        <i class="fa-solid fa-eye w-5 text-blue-400"></i> Visual Memory
+                    </a>
+                    <a href="#"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+                        <i class="fa-solid fa-hashtag w-5 text-blue-400"></i> Number Memory
+                    </a>
+                </div>
+                <div class="border-t border-gray-800 pt-4">
+                    <button
+                        class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white px-8 py-2.5 rounded-xl font-bold text-sm transition">
+                        Start Test
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        <section class="flex flex-col items-center px-4 sm:px-6 pt-6 sm:pt-8 pb-12 sm:pb-16">
+            <div class="w-full max-w-2xl mx-auto">
+
+                <!-- Heading -->
+                <div class="flex flex-col items-center text-center mb-6 sm:mb-10 gap-3">
+                    <div>
+                        <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight mb-2">
+                            Mind <span
+                                class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Grid</span>
+                        </h1>
+                        <p class="text-sm sm:text-base text-gray-500 font-medium tracking-wide">
+                            <span
+                                class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700 font-semibold">Memorize</span>
+                            The Pattern.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Stats Row -->
+                <div class="flex items-center justify-between gap-2 mb-4 sm:mb-5">
+
+                    <!-- Stats Pill -->
+                    <div
+                        class="flex items-stretch bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shrink-0 min-w-0">
+                        <div class="flex flex-col items-center justify-center px-3 sm:px-6 py-2.5 gap-0.5">
+                            <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Round
+                            </p>
+                            <p id="stat-round" class="text-sm sm:text-lg font-black text-white">1</p>
+                        </div>
+                        <div class="w-px bg-gray-800"></div>
+                        <div class="flex flex-col items-center justify-center px-3 sm:px-6 py-2.5 gap-0.5">
+                            <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Best
+                            </p>
+                            <p id="stat-best"
+                                class="text-sm sm:text-lg font-black text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-600">
+                                --</p>
+                        </div>
+                        <div class="w-px bg-gray-800"></div>
+                        <div class="flex flex-col items-center justify-center px-3 sm:px-6 py-2.5 gap-0.5">
+                            <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Score
+                            </p>
+                            <p id="stat-score" class="text-sm sm:text-lg font-black text-white">0</p>
+                        </div>
+                    </div>
+
+                    <!-- Try Again Button -->
+                    <button id="try-again-btn"
+                        class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl border border-gray-700 bg-gray-900 text-white text-xs sm:text-sm font-bold whitespace-nowrap hover:border-blue-500 hover:bg-blue-950 hover:text-blue-400 transition-all duration-200 cursor-pointer shrink-0">
+                        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                        Try Again
+                    </button>
+
+                </div>
+
+                <!-- Game Box (Clickable) -->
+                <button id="game-box"
+                    class="w-full rounded-2xl border border-gray-800 bg-gradient-to-b from-gray-900 to-gray-950 p-2 sm:p-3 shadow-2xl cursor-pointer hover:border-gray-700 transition-all duration-200 text-left">
+                    <div class="rounded-xl bg-gray-950 border border-gray-800 flex flex-col items-center justify-center px-4 sm:px-6"
+                        style="height: clamp(260px, 45vh, 520px);">
+
+                        <!-- ① IDLE STATE: shown before the game starts -->
+                        <div id="idle-state" class="flex flex-col items-center gap-6">
+                            <!-- Decorative static grid (purely visual, no IDs) -->
+                            <div class="grid grid-cols-4 gap-2 pointer-events-none">
+                                <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-gray-900 border border-gray-800"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-gray-900 border border-gray-800"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-gray-900 border border-gray-800"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-gray-900 border border-gray-800"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-gray-900 border border-gray-800"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-gray-900 border border-gray-800"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-gray-900 border border-gray-800"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-gray-900 border border-gray-800"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                            </div>
+                            <p class="text-gray-500 text-sm sm:text-base font-medium tracking-wide">
+                                Click anywhere to start the game
+                            </p>
+                        </div>
+
+                        <!-- ② ACTIVE STATE: the live 4×4 grid with real IDs (hidden until game starts) -->
+                        <div id="active-state" class="hidden flex-col items-center gap-6">
+                            <div class="grid grid-cols-4 gap-2">
+                                <div id="0"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="1"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="2"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="3"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="4"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="5"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="6"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="7"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="8"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="9"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="10"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="11"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="12"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="13"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="14"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="15"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                            </div>
+                        </div>
+
+                        <!-- ③ RESULT STATE: shown after each round ends (hidden until needed) -->
+                        <div id="result-state" class="hidden flex-col items-center text-center gap-3">
+                            <p id="reaction-number"
+                                class="text-7xl sm:text-8xl lg:text-9xl font-black text-white tabular-nums tracking-tighter leading-none">
+                                0 / 0
+                            </p>
+                            <p class="text-xs font-semibold uppercase tracking-widest text-gray-500">
+                                Correct Tiles
+                            </p>
+                            <span id="perf-badge"
+                                class="px-4 sm:px-5 py-1 sm:py-1.5 rounded-full text-xs font-black uppercase tracking-widest border border-red-900 bg-red-950 text-red-400">
+                                Game Over
+                            </span>
+                        </div>
+
+                    </div>
+                </button>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 border-t border-gray-900 pt-20 pb-10">
+        <div class="container mx-auto px-6">
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-16">
+
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                        <span class="text-white font-bold tracking-widest uppercase text-xs">System Status:
+                            Online</span>
+                    </div>
+                    <h2 class="text-2xl font-bold text-white">Human Metrix</h2>
+                    <p class="text-gray-500 text-sm leading-relaxed max-w-xs">
+                        A data-driven platform designed to quantify human potential through high-fidelity cognitive
+                        benchmarks.
+                    </p>
+                </div>
+
+                <div class="lg:col-span-5 grid grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-white text-sm font-bold mb-6 uppercase tracking-widest">Benchmarks</h3>
+                        <ul class="space-y-4 text-sm">
+                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Reaction
+                                    Time</a></li>
+                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Mind Grid</a>
+                            </li>
+                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Typing Speed</a>
+                            </li>
+                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Aim Trainer</a>
+                            </li>
+                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Visual
+                                    Memory</a></li>
+                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Number
+                                    Memory</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-white text-sm font-bold mb-6 uppercase tracking-widest">Platform</h3>
+                        <ul class="space-y-4 text-sm">
+                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Leaderboards</a>
+                            </li>
+                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Global Stats</a>
+                            </li>
+                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">API Access</a>
+                            </li>
+                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Privacy</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-3">
+                    <h3 class="text-white text-sm font-bold mb-6 uppercase tracking-widest">Report Issue</h3>
+                    <div class="space-y-3">
+                        <input type="text" placeholder="Describe bug..."
+                            class="w-full bg-gray-900/50 border border-gray-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition text-white placeholder:text-gray-600" />
+                        <button
+                            class="w-full bg-blue-600/10 border border-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white py-3 rounded-lg text-xs font-black uppercase tracking-widest transition-all">
+                            Submit Report
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-900 pt-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="text-gray-600 text-[11px] uppercase tracking-widest font-medium">
+                    © 2026 Human Metrix // All Rights Reserved
+                </div>
+                <div class="flex items-center space-x-3">
+                    <a href="#"
+                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+                        aria-label="Twitter / X">
+                        <i class="fa-brands fa-x-twitter text-gray-500 group-hover:text-white text-sm"></i>
+                    </a>
+                    <a href="#"
+                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+                        aria-label="Discord">
+                        <i class="fa-brands fa-discord text-gray-500 group-hover:text-white text-sm"></i>
+                    </a>
+                    <a href="#"
+                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+                        aria-label="GitHub">
+                        <i class="fa-brands fa-github text-gray-500 group-hover:text-white text-sm"></i>
+                    </a>
+                    <a href="#"
+                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+                        aria-label="Instagram">
+                        <i class="fa-brands fa-instagram text-gray-500 group-hover:text-white text-sm"></i>
+                    </a>
+                    <a href="#"
+                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+                        aria-label="Facebook">
+                        <i class="fa-brands fa-facebook text-gray-500 group-hover:text-white text-sm"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="../script.js"></script>
+    <script src="../Game Logic/MindGrid.js"></script>
+
+</body>
+
+</html>

@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Human Metrix</title>
+    <title>Human Metrix - Reaction Time</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="dist/style.css">
+    <link rel="stylesheet" href="../dist/style.css">
     <style>
         #mobile-menu {
             max-height: 0;
@@ -93,8 +93,8 @@
 
             <!-- Logo -->
             <div class="flex items-center shrink-0">
-                <a href="index.html" class="flex items-center group">
-                    <img src="Images/logo.png" alt="Human Metrix Logo"
+                <a href="../index.html" class="flex items-center group">
+                    <img src="../Images/logo.png" alt="Human Metrix Logo"
                         class="h-8 md:h-10 w-auto transition-all duration-300 group-hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]">
                     <h1 class="ml-2 md:ml-3 text-base md:text-xl font-bold text-white tracking-tight whitespace-nowrap">
                         Human <span
@@ -105,14 +105,14 @@
 
             <!-- Desktop Nav -->
             <nav id="desktop-nav" class="items-center gap-x-5 text-sm font-medium">
-                <a href="Games/ReactionTime.html" class="hover:text-blue-400 transition whitespace-nowrap">Reaction
+                <a href="../index.html" class="hover:text-blue-400 transition whitespace-nowrap">Home</a>
+                <a href="ReactionTime.html" class="text-blue-400 transition whitespace-nowrap">Reaction
                     Time</a>
-                <a href="Games/MindGrid.html" class="hover:text-blue-400 transition whitespace-nowrap">Mind Grid</a>
-                <a href="Games/TypingSpeed.html" class="hover:text-blue-400 transition whitespace-nowrap">Typing Speed</a>
+                <a href="MindGrid.html" class="hover:text-blue-400 transition whitespace-nowrap">Mind Grid</a>
+                <a href="TypingSpeed.html" class="hover:text-blue-400 transition whitespace-nowrap">Typing Speed</a>
                 <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Aim Trainer</a>
                 <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Visual Memory</a>
                 <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Number Memory</a>
-                <a href="#" class="hidden hover:text-blue-400 transition whitespace-nowrap">Leaderboard</a>
             </nav>
 
             <!-- Right side: CTA + hamburger -->
@@ -136,15 +136,19 @@
         <div id="mobile-menu" class="bg-gray-900/95 backdrop-blur-md border-b border-gray-800">
             <div class="container mx-auto px-4 sm:px-6 py-5">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 mb-5">
-                    <a href="./Games/ReactionTime.html"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+                    <a href="../index.html"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium sm:col-span-2">
+                        <i class="fa-solid fa-house w-5 text-blue-400"></i> Home
+                    </a>
+                    <a href="ReactionTime.html"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-bolt-lightning w-5 text-blue-400"></i> Reaction Time
                     </a>
-                    <a href="Games/MindGrid.html"
+                    <a href="MindGrid.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-brain w-5 text-blue-400"></i> Mind Grid
                     </a>
-                    <a href="Games/TypingSpeed.html"
+                    <a href="TypingSpeed.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-regular fa-keyboard w-5 text-blue-400"></i> Typing Speed
                     </a>
@@ -160,10 +164,6 @@
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-hashtag w-5 text-blue-400"></i> Number Memory
                     </a>
-                    <a href="#"
-                        class=" hidden flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium sm:col-span-2">
-                        <i class="fa-solid fa-trophy w-5 text-blue-400"></i> Leaderboard
-                    </a>
                 </div>
                 <div class="border-t border-gray-800 pt-4">
                     <button
@@ -177,152 +177,98 @@
 
     <!-- Main Content -->
     <main class="flex-grow">
+        <section class="flex flex-col items-center px-4 sm:px-6 pt-6 sm:pt-8 pb-12 sm:pb-16">
+            <div class="w-full max-w-2xl mx-auto">
 
-        <!-- Hero Section -->
-        <section class="flex items-center justify-center px-6 pt-20 pb-10">
-            <div class="max-w-4xl w-full text-center">
-                <h1 class="text-5xl sm:text-6xl lg:text-8xl font-black text-white mb-8 tracking-tighter leading-none">
-                    Test Your
-                    <span
-                        class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Cognitive</span>
-                    Limits
-                </h1>
-                <p class="text-gray-400 text-lg md:text-xl max-w-xl mx-auto leading-relaxed opacity-80">
-                    Measure reaction time, memory, and focus through professional-grade interactive games.
-                </p>
-                <div class="mt-10">
-                    <button
-                        class="bg-white text-gray-950 px-8 py-4 rounded-full font-bold hover:bg-blue-500 hover:text-white transition-all duration-300 shadow-2xl shadow-white/5">
-                        Explore Tests
+                <!-- Heading -->
+                <div class="flex flex-col items-center text-center mb-6 sm:mb-10 gap-3">
+                    <div>
+                        <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight mb-2">
+                            Reaction <span
+                                class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Time</span>
+                        </h1>
+                        <p class="text-sm sm:text-base text-gray-500 font-medium tracking-wide">
+                            When the box turns <span
+                                class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700 font-semibold">Blue</span>,
+                            Click.
+                        </p>
+                    </div>
+                </div>
+                <!-- Stats Row (above the box) -->
+                <div class="flex items-center justify-between gap-3 mb-4 sm:mb-5">
+
+                    <!-- Stats -->
+                    <div class="flex items-center gap-4 sm:gap-6 lg:gap-10">
+                        <div>
+                            <p
+                                class="text-xs sm:text-xl font-bold uppercase tracking-widest text-gray-600 mb-0.5 sm:mb-1">
+                                Last</p>
+                            <p id="stat-last" class="text-base sm:text-xl font-black text-white">--</p>
+                        </div>
+                        <div class="w-px h-7 sm:h-8 bg-gray-800"></div>
+                        <div>
+                            <p
+                                class="text-xs sm:text-xl font-bold uppercase tracking-widest text-gray-600 mb-0.5 sm:mb-1">
+                                Best</p>
+                            <p id="stat-best"
+                                class="text-base sm:text-xl font-black text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-600">
+                                --</p>
+                        </div>
+                        <div class="w-px h-7 sm:h-8 bg-gray-800"></div>
+                        <div>
+                            <p
+                                class="text-xs sm:text-xl font-bold uppercase tracking-widest text-gray-600 mb-0.5 sm:mb-1">
+                                Tries</p>
+                            <p id="stat-tries" class="text-base sm:text-xl font-black text-white">0</p>
+                        </div>
+                    </div>
+
+                    <!-- Try Again Button -->
+                    <button id="try-again-btn"
+                        class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl border border-gray-700 bg-gray-900 text-white text-xs sm:text-sm font-bold whitespace-nowrap hover:border-blue-500 hover:bg-blue-950 hover:text-blue-400 transition-all duration-200 cursor-pointer shrink-0">
+                        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                        Try Again
                     </button>
+
                 </div>
+
+                <!-- Game Box (Clickable) -->
+                <button id="game-box"
+                    class="w-full rounded-2xl border border-gray-800 bg-gradient-to-b from-gray-900 to-gray-950 p-2 sm:p-3 shadow-2xl cursor-pointer hover:border-gray-700 transition-all duration-200 text-left">
+                    <div class="rounded-xl bg-gray-950 border border-gray-800 flex flex-col items-center justify-center px-4 sm:px-6"
+                        style="height: clamp(260px, 45vh, 520px);">
+
+                        <!-- Idle State -->
+                        <div id="idle-state" class="flex flex-col items-center text-center">
+                            <p class="text-gray-500 text-xl sm:text-xl lg:text-2xl font-medium tracking-wide">
+                                Click anywhere to start the game
+                            </p>
+                        </div>
+
+                        <!-- Result State (hidden by default) -->
+                        <div id="result-state" class="hidden flex-col items-center text-center">
+                            <p id="reaction-number"
+                                class="text-7xl sm:text-8xl lg:text-9xl font-black text-white tabular-nums tracking-tighter leading-none mb-2 sm:mb-3">
+                                413
+                            </p>
+                            <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-4 sm:mb-6">
+                                Milliseconds
+                            </p>
+                            <span id="perf-badge"
+                                class="px-4 sm:px-5 py-1 sm:py-1.5 rounded-full text-xs font-black uppercase tracking-widest border border-red-900 bg-red-950 text-red-400">
+                                Slow
+                            </span>
+                        </div>
+
+                    </div>
+                </button>
+
             </div>
         </section>
-
-        <!-- Test Cards Section -->
-        <section class="px-6 pb-24 pt-4">
-            <div class="max-w-6xl mx-auto">
-
-                <!-- Section Heading -->
-                <div class="text-center mb-14">
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-                        Choose Your
-                        <span class="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-                            Challenge
-                        </span>
-                    </h2>
-                    <p class="text-gray-400 text-lg">Six scientifically-designed tests to benchmark your mind.</p>
-                </div>
-
-                <!-- Cards Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-
-                    <!-- Reaction Time -->
-                    <div
-                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
-                        <div
-                            class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
-                        </div>
-                        <i class="fa-solid fa-bolt-lightning card-icon"></i>
-                        <h3 class="text-white font-semibold text-xl mb-2">Reaction Time</h3>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6">Measure how fast you respond to a visual
-                            stimulus.</p>
-                        <span
-                            class="inline-flex items-center gap-2 text-blue-400 text-sm font-medium group-hover:text-blue-300 transition-colors duration-200">
-                            Start Test
-                            <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
-                        </span>
-                    </div>
-
-                    <!-- Mind Grid -->
-                    <div
-                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
-                        <div
-                            class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
-                        </div>
-                        <i class="fa-solid fa-brain card-icon"></i>
-                        <h3 class="text-white font-semibold text-xl mb-2">Mind Grid</h3>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6">Recall a growing sequence of numbers under
-                            pressure.</p>
-                        <span
-                            class="inline-flex items-center gap-2 text-blue-400 text-sm font-medium group-hover:text-blue-300 transition-colors duration-200">
-                            Start Test
-                            <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
-                        </span>
-                    </div>
-
-                    <!-- Typing Speed -->
-                    <div
-                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
-                        <div
-                            class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
-                        </div>
-                        <i class="fa-regular fa-keyboard card-icon"></i>
-                        <h3 class="text-white font-semibold text-xl mb-2">Typing Speed</h3>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6">Test your WPM and accuracy against the
-                            clock.</p>
-                        <span
-                            class="inline-flex items-center gap-2 text-blue-400 text-sm font-medium group-hover:text-blue-300 transition-colors duration-200">
-                            Start Test
-                            <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
-                        </span>
-                    </div>
-
-                    <!-- Aim Trainer -->
-                    <div
-                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
-                        <div
-                            class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
-                        </div>
-                        <i class="fa-solid fa-crosshairs card-icon"></i>
-                        <h3 class="text-white font-semibold text-xl mb-2">Aim Trainer</h3>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6">Hit as many targets as possible in 30
-                            seconds.</p>
-                        <span
-                            class="inline-flex items-center gap-2 text-blue-400 text-sm font-medium group-hover:text-blue-300 transition-colors duration-200">
-                            Start Test
-                            <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
-                        </span>
-                    </div>
-
-                    <!-- Visual Memory -->
-                    <div
-                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
-                        <div
-                            class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
-                        </div>
-                        <i class="fa-solid fa-eye card-icon"></i>
-                        <h3 class="text-white font-semibold text-xl mb-2">Visual Memory</h3>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6">Remember and reproduce an increasingly
-                            complex grid.</p>
-                        <span
-                            class="inline-flex items-center gap-2 text-blue-400 text-sm font-medium group-hover:text-blue-300 transition-colors duration-200">
-                            Start Test
-                            <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
-                        </span>
-                    </div>
-
-                    <!-- Number Memory -->
-                    <div
-                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
-                        <div
-                            class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
-                        </div>
-                        <i class="fa-solid fa-hashtag card-icon"></i>
-                        <h3 class="text-white font-semibold text-xl mb-2">Number Memory</h3>
-                        <p class="text-gray-400 text-sm leading-relaxed mb-6">Push the limits of your short-term digit
-                            recall.</p>
-                        <span
-                            class="inline-flex items-center gap-2 text-blue-400 text-sm font-medium group-hover:text-blue-300 transition-colors duration-200">
-                            Start Test
-                            <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
-                        </span>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
     </main>
 
     <!-- Footer -->
@@ -422,8 +368,8 @@
             </div>
         </div>
     </footer>
-
-    <script src="script.js"></script>
+    <script src="../script.js"></script>
+    <script src="../Game Logic/ReactionTime.js"></script>
 
 </body>
 
