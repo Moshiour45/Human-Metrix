@@ -43,7 +43,7 @@ function setBoxBlue() {
 function setBoxRed() {
     innerBox.style.transition = 'background-color 0.2s ease';
     innerBox.classList.remove('bg-gray-950', 'bg-blue-600');
-    innerBox.classList.add('bg-gray-700');
+    innerBox.classList.add('bg-red-950');
 }
 
 // Panels
