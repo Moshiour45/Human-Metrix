@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Human Metrix</title>
+    <title>Human Metrix - MindGrid</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -105,14 +105,13 @@
 
             <!-- Desktop Nav -->
             <nav id="desktop-nav" class="items-center gap-x-5 text-sm font-medium">
-                <a href="ReactionTime.html" class="hover:text-blue-400 transition whitespace-nowrap">Reaction
-                    Time</a>
-                <a href="MindGrid.html" class="text-blue-400 transition whitespace-nowrap">Mind Grid</a>
+                <a href="../index.html" class="hover:text-blue-400 transition whitespace-nowrap">Home</a>
+                <a href="ReactionTime.html" class="hover:text-blue-400 transition whitespace-nowrap">Reaction Time</a>
+                <a href="MindGrid.html" class="hover:text-blue-400 transition whitespace-nowrap">Mind Grid</a>
                 <a href="TypingSpeed.html" class="hover:text-blue-400 transition whitespace-nowrap">Typing Speed</a>
                 <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Aim Trainer</a>
                 <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Visual Memory</a>
                 <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Number Memory</a>
-                <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Leaderboard</a>
             </nav>
 
             <!-- Right side: CTA + hamburger -->
@@ -136,12 +135,16 @@
         <div id="mobile-menu" class="bg-gray-900/95 backdrop-blur-md border-b border-gray-800">
             <div class="container mx-auto px-4 sm:px-6 py-5">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 mb-5">
+                    <a href="../index.html"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium sm:col-span-2">
+                        <i class="fa-solid fa-house w-5 text-blue-400"></i> Home
+                    </a>
                     <a href="ReactionTime.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-bolt-lightning w-5 text-blue-400"></i> Reaction Time
                     </a>
                     <a href="MindGrid.html"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 text-blue-400 transition text-sm font-medium">
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-brain w-5 text-blue-400"></i> Mind Grid
                     </a>
                     <a href="TypingSpeed.html"
@@ -159,10 +162,6 @@
                     <a href="#"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-hashtag w-5 text-blue-400"></i> Number Memory
-                    </a>
-                    <a href="#"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium sm:col-span-2">
-                        <i class="fa-solid fa-trophy w-5 text-blue-400"></i> Leaderboard
                     </a>
                 </div>
                 <div class="border-t border-gray-800 pt-4">
@@ -241,9 +240,9 @@
                     <div class="rounded-xl bg-gray-950 border border-gray-800 flex flex-col items-center justify-center px-4 sm:px-6"
                         style="height: clamp(260px, 45vh, 520px);">
 
-                        <!-- Idle State -->
+                        <!-- ① IDLE STATE: shown before the game starts -->
                         <div id="idle-state" class="flex flex-col items-center gap-6">
-                            <!-- Decorative 4x4 grid -->
+                            <!-- Decorative static grid (purely visual, no IDs) -->
                             <div class="grid grid-cols-4 gap-2 pointer-events-none">
                                 <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
                                     style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
@@ -278,23 +277,77 @@
                                 <div class="rounded-lg bg-blue-950 border border-blue-800 shadow-[0_0_10px_rgba(37,99,235,0.25)]"
                                     style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
                             </div>
-                            <p class="text-gray-500 text-sm sm:text-base lg:text-lg font-medium tracking-wide">
+                            <p class="text-gray-500 text-sm sm:text-base font-medium tracking-wide">
                                 Click anywhere to start the game
                             </p>
                         </div>
 
-                        <!-- Result State (hidden by default) -->
+                        <!-- ② ACTIVE STATE: the live 4×4 grid with real IDs (hidden until game starts) -->
+                        <div id="active-state" class="hidden flex-col items-center gap-6">
+                            <div class="grid grid-cols-4 gap-2">
+                                <div id="0"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="1"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="2"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="3"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="4"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="5"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="6"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="7"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="8"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="9"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="10"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="11"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="12"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="13"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="14"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                                <div id="15"
+                                    class="rounded-lg bg-gray-900 border border-gray-800 transition-all duration-200"
+                                    style="width:clamp(32px,7vw,48px);height:clamp(32px,7vw,48px);"></div>
+                            </div>
+                        </div>
+
+                        <!-- ③ RESULT STATE: shown after each round ends (hidden until needed) -->
                         <div id="result-state" class="hidden flex-col items-center text-center gap-3">
                             <p id="reaction-number"
                                 class="text-7xl sm:text-8xl lg:text-9xl font-black text-white tabular-nums tracking-tighter leading-none">
-                                7
+                                0 / 0
                             </p>
                             <p class="text-xs font-semibold uppercase tracking-widest text-gray-500">
                                 Correct Tiles
                             </p>
                             <span id="perf-badge"
                                 class="px-4 sm:px-5 py-1 sm:py-1.5 rounded-full text-xs font-black uppercase tracking-widest border border-red-900 bg-red-950 text-red-400">
-                                Try Again
+                                Game Over
                             </span>
                         </div>
 
@@ -333,12 +386,13 @@
                             <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Mind Grid</a>
                             </li>
                             <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Typing Speed</a>
+                            </li>
                             <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Aim Trainer</a>
+                            </li>
                             <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Visual
                                     Memory</a></li>
                             <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Number
                                     Memory</a></li>
-                            </li>
                         </ul>
                     </div>
                     <div>
@@ -402,8 +456,8 @@
             </div>
         </div>
     </footer>
-
     <script src="../script.js"></script>
+    <script src="../Game Logic/MindGrid.js"></script>
 
 </body>
 

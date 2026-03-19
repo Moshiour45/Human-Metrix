@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Human Metrix</title>
+    <title>Human Metrix - Typing Speed</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../dist/style.css">
     <style>
+        
         #mobile-menu {
             max-height: 0;
             overflow: hidden;
@@ -73,14 +74,136 @@
             }
         }
 
-        .card-icon {
+        /* ── Word display ── */
+        #word-area {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: clamp(18px, 2vw, 24px);
+            line-height: 2.2;
+            position: relative;
+            /* Exactly 3 lines tall */
+            height: calc(2.2em * 3);
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* This inner div slides upward as user progresses through lines */
+        #word-inner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            transition: top 0.12s ease;
+        }
+
+        .ts-word {
             display: inline-block;
-            font-size: 2.25rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(to bottom, #60a5fa, #1d4ed8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-right: 0.55em;
+            white-space: nowrap;
+        }
+
+        /* Wrong-committed word gets a red underline */
+        .ts-word.wrong-word {
+            border-bottom: 2px solid #ef4444;
+        }
+
+        /*
+         * Letter colors:
+         *   default  → light gray so untyped words are clearly readable
+         *   correct  → site's blue to show what you've typed correctly
+         *   wrong    → red so mistakes stand out
+         *   extra    → darker red + underline for characters typed past word end
+         *
+         */
+        .ts-letter {
+            color: #9ca3af;
+        }
+
+        .ts-letter.correct {
+            color: #60a5fa;
+        }
+
+        .ts-letter.wrong {
+            color: #ef4444;
+        }
+
+        .ts-letter.extra {
+            color: #dc2626;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        /* Blinking blue cursor bar before the active letter */
+        .ts-letter.cursor::before {
+            content: '';
+            display: inline-block;
+            width: 2px;
+            height: 0.85em;
+            background: #3b82f6;
+            border-radius: 1px;
+            vertical-align: middle;
+            margin-right: 1px;
+            animation: ts-blink 1s step-end infinite;
+        }
+
+        /* Cursor after the last letter of a word */
+        .ts-word.cursor-after::after {
+            content: '';
+            display: inline-block;
+            width: 2px;
+            height: 0.85em;
+            background: #3b82f6;
+            border-radius: 1px;
+            vertical-align: middle;
+            margin-left: 2px;
+            animation: ts-blink 1s step-end infinite;
+        }
+
+        @keyframes ts-blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Timer danger state */
+        .timer-danger {
+            color: #ef4444 !important;
+            -webkit-text-fill-color: #ef4444 !important;
+            animation: ts-pulse 0.6s ease-in-out infinite alternate;
+        }
+
+        @keyframes ts-pulse {
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0.4;
+            }
+        }
+
+        /* Typed word */
+        .ts-word.committed {
+            opacity: 0.55;
+        }
+
+        /* The invisible textarea that captures typing */
+        #hidden-input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            resize: none;
+            border: none;
+            outline: none;
         }
     </style>
 </head>
@@ -90,8 +213,6 @@
     <!-- NavBar -->
     <header class="bg-gray-900/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
         <div class="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-4">
-
-            <!-- Logo -->
             <div class="flex items-center shrink-0">
                 <a href="../index.html" class="flex items-center group">
                     <img src="../Images/logo.png" alt="Human Metrix Logo"
@@ -102,226 +223,224 @@
                     </h1>
                 </a>
             </div>
-
-            <!-- Desktop Nav -->
             <nav id="desktop-nav" class="items-center gap-x-5 text-sm font-medium">
-                <a href="ReactionTime.html" class="hover:text-blue-400 transition whitespace-nowrap">Reaction
-                    Time</a>
+                <a href="../index.html" class="hover:text-blue-400 transition whitespace-nowrap">Home</a>
+                <a href="ReactionTime.html" class="hover:text-blue-400 transition whitespace-nowrap">Reaction Time</a>
                 <a href="MindGrid.html" class="hover:text-blue-400 transition whitespace-nowrap">Mind Grid</a>
-                <a href="TypingSpeed.html" class="text-blue-400 transition whitespace-nowrap">Typing Speed</a>
+                <a href="TypingSpeed.html" class="hover:text-blue-400 transition whitespace-nowrap">Typing Speed</a>
                 <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Aim Trainer</a>
                 <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Visual Memory</a>
                 <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Number Memory</a>
-                <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Leaderboard</a>
             </nav>
-
-            <!-- Right side: CTA + hamburger -->
             <div class="flex items-center gap-2 sm:gap-3 shrink-0">
                 <button id="start-btn-desktop"
                     class="bg-blue-600 hover:bg-blue-500 text-white px-4 sm:px-5 py-2 rounded-full text-sm font-semibold transition shadow-lg shadow-blue-900/20 whitespace-nowrap">
                     Start Test
                 </button>
-
-                <!-- Hamburger -->
                 <button id="menu-toggle"
                     class="flex flex-col justify-center items-center gap-[5px] w-9 h-9 p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none transition-colors">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
+                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
                 </button>
             </div>
         </div>
-
-        <!-- Mobile / Tablet Dropdown Menu -->
         <div id="mobile-menu" class="bg-gray-900/95 backdrop-blur-md border-b border-gray-800">
             <div class="container mx-auto px-4 sm:px-6 py-5">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 mb-5">
+                    <a href="../index.html"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium sm:col-span-2"><i
+                            class="fa-solid fa-trophy w-5 text-blue-400"></i> Home</a>
                     <a href="ReactionTime.html"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
-                        <i class="fa-solid fa-bolt-lightning w-5 text-blue-400"></i> Reaction Time
-                    </a>
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i
+                            class="fa-solid fa-bolt-lightning w-5 text-blue-400"></i> Reaction Time</a>
                     <a href="MindGrid.html"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
-                        <i class="fa-solid fa-brain w-5 text-blue-400"></i> Mind Grid
-                    </a>
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i
+                            class="fa-solid fa-brain w-5 text-blue-400"></i> Mind Grid</a>
                     <a href="TypingSpeed.html"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 text-blue-400 transition text-sm font-medium">
-                        <i class="fa-regular fa-keyboard w-5 text-blue-400"></i> Typing Speed
-                    </a>
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i
+                            class="fa-regular fa-keyboard w-5 text-blue-400"></i> Typing Speed</a>
                     <a href="#"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
-                        <i class="fa-solid fa-crosshairs w-5 text-blue-400"></i> Aim Trainer
-                    </a>
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i
+                            class="fa-solid fa-crosshairs w-5 text-blue-400"></i> Aim Trainer</a>
                     <a href="#"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
-                        <i class="fa-solid fa-eye w-5 text-blue-400"></i> Visual Memory
-                    </a>
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i
+                            class="fa-solid fa-eye w-5 text-blue-400"></i> Visual Memory</a>
                     <a href="#"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
-                        <i class="fa-solid fa-hashtag w-5 text-blue-400"></i> Number Memory
-                    </a>
-                    <a href="#"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium sm:col-span-2">
-                        <i class="fa-solid fa-trophy w-5 text-blue-400"></i> Leaderboard
-                    </a>
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i
+                            class="fa-solid fa-hashtag w-5 text-blue-400"></i> Number Memory</a>
                 </div>
                 <div class="border-t border-gray-800 pt-4">
                     <button
-                        class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white px-8 py-2.5 rounded-xl font-bold text-sm transition">
-                        Start Test
-                    </button>
+                        class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white px-8 py-2.5 rounded-xl font-bold text-sm transition">Start
+                        Test</button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
+    <!-- Main -->
     <main class="flex-grow">
-    <section class="flex flex-col items-center px-4 sm:px-6 pt-6 sm:pt-8 pb-12 sm:pb-16">
-        <div class="w-full max-w-3xl mx-auto">
+        <section class="flex flex-col items-center px-4 sm:px-6 pt-6 sm:pt-8 pb-12 sm:pb-16">
+            <div class="w-full max-w-3xl mx-auto">
 
-            <!-- Heading -->
-            <div class="flex flex-col items-center text-center mb-6 sm:mb-10 gap-3">
-                <div>
+                <!-- Heading -->
+                <div class="flex flex-col items-center text-center mb-6 sm:mb-10">
                     <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight mb-2">
-                        Typing <span class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Speed</span>
+                        Typing <span
+                            class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Speed</span>
                     </h1>
                     <p class="text-sm sm:text-base text-gray-500 font-medium tracking-wide">
-                        Type the <span class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700 font-semibold">highlighted</span> text as fast as you can.
+                        Type the <span
+                            class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700 font-semibold">highlighted</span>
+                        words as fast and accurately as you can.
                     </p>
                 </div>
-            </div>
 
-            <!-- Stats + Controls Row -->
-            <div class="flex items-center justify-between gap-2 mb-4 sm:mb-5">
-                <div class="flex items-stretch bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shrink-0 min-w-0">
-                    <div class="flex flex-col items-center justify-center px-3 sm:px-6 py-2.5 gap-0.5">
-                        <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">WPM</p>
-                        <p id="stat-wpm" class="text-sm sm:text-lg font-black text-white">--</p>
-                    </div>
-                    <div class="w-px bg-gray-800"></div>
-                    <div class="flex flex-col items-center justify-center px-3 sm:px-6 py-2.5 gap-0.5">
-                        <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Best</p>
-                        <p id="stat-best" class="text-sm sm:text-lg font-black text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-600">--</p>
-                    </div>
-                    <div class="w-px bg-gray-800"></div>
-                    <div class="flex flex-col items-center justify-center px-3 sm:px-6 py-2.5 gap-0.5">
-                        <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Accuracy</p>
-                        <p id="stat-accuracy" class="text-sm sm:text-lg font-black text-white">--%</p>
-                    </div>
-                </div>
-                <button id="try-again-btn"
-                    class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl border border-gray-700 bg-gray-900 text-white text-xs sm:text-sm font-bold whitespace-nowrap hover:border-blue-500 hover:bg-blue-950 hover:text-blue-400 transition-all duration-200 cursor-pointer shrink-0">
-                    <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                            d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-                    </svg>
-                    Try Again
-                </button>
-            </div>
-
-            <!-- Game Box -->
-            <div id="game-box"
-                class="w-full rounded-2xl border border-gray-800 bg-gradient-to-b from-gray-900 to-gray-950 p-2 sm:p-3 shadow-2xl transition-all duration-200 cursor-pointer">
-                <div class="rounded-xl bg-gray-950 border border-gray-800 flex flex-col items-center justify-center px-4 sm:px-10"
-                    style="height: clamp(300px, 50vh, 560px);">
-
-                    <!-- Idle State -->
-                    <div id="idle-state" class="flex flex-col items-center gap-6 w-full max-w-2xl">
-                        <div class="flex items-center gap-1 bg-gray-900 border border-gray-800 rounded-lg p-1">
-                            <button class="time-opt px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-white hover:bg-gray-800 transition-all duration-150" data-time="15">15s</button>
-                            <button class="time-opt px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest bg-gray-800 text-white transition-all duration-150" data-time="30">30s</button>
-                            <button class="time-opt px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-white hover:bg-gray-800 transition-all duration-150" data-time="60">60s</button>
-                            <button class="time-opt px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-white hover:bg-gray-800 transition-all duration-150" data-time="120">120s</button>
-                        </div>
-                        <div id="word-display"
-                            class="w-full text-center font-mono text-xl sm:text-2xl lg:text-3xl tracking-wide select-none overflow-hidden"
-                            style="line-height: 2.4; max-height: calc(2.4em * 3);">
-                        </div>
-                        <div class="flex items-center gap-2 text-gray-600 text-xs font-medium tracking-wide">
-                            <i class="fa-regular fa-keyboard"></i>
-                            <span>Click anywhere to start typing</span>
-                        </div>
-                    </div>
-
-                    <!-- Active State -->
-                    <div id="active-state" class="hidden flex-col items-center gap-5 w-full max-w-2xl">
-                        <div class="self-start flex items-baseline gap-1.5">
-                            <span id="timer-display"
-                                class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700 tabular-nums leading-none">30</span>
-                            <span class="text-xs font-bold uppercase tracking-widest text-gray-600">sec</span>
-                        </div>
-                        <div id="active-word-display"
-                            class="w-full text-center font-mono text-xl sm:text-2xl lg:text-3xl tracking-wide select-none overflow-hidden relative"
-                            style="line-height: 2.4; max-height: calc(2.4em * 3);">
-                        </div>
-                        <input id="active-typing-input" type="text" autocomplete="off" autocorrect="off"
-                            autocapitalize="off" spellcheck="false"
-                            class="w-full bg-transparent border-0 border-b-2 border-gray-800 focus:border-blue-500 py-2 text-white font-mono text-base sm:text-lg placeholder:text-gray-700 focus:outline-none transition-colors duration-200 text-center"
-                            placeholder="start typing..." />
-                    </div>
-
-                    <!-- Result State -->
-                    <div id="result-state" class="hidden flex-col items-center text-center gap-5 w-full">
-                        <div class="flex flex-col items-center gap-1">
-                            <p id="result-wpm"
-                                class="text-7xl sm:text-8xl lg:text-9xl font-black text-white tabular-nums tracking-tighter leading-none">
-                                0
+                <!-- Stat bar + Try Again -->
+                <div class="flex items-center justify-between gap-2 mb-4 sm:mb-5">
+                    <div
+                        class="flex items-stretch bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shrink-0">
+                        <div class="flex flex-col items-center justify-center px-3 sm:px-6 py-2.5 gap-0.5">
+                            <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">WPM
                             </p>
-                            <p class="text-xs font-semibold uppercase tracking-widest text-gray-500">
-                                Words Per Minute
+                            <p id="stat-wpm" class="text-sm sm:text-lg font-black text-white">--</p>
+                        </div>
+                        <div class="w-px bg-gray-800"></div>
+                        <div class="flex flex-col items-center justify-center px-3 sm:px-6 py-2.5 gap-0.5">
+                            <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Best
+                            </p>
+                            <p id="stat-best"
+                                class="text-sm sm:text-lg font-black text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-600">
+                                --</p>
+                        </div>
+                        <div class="w-px bg-gray-800"></div>
+                        <div class="flex flex-col items-center justify-center px-3 sm:px-6 py-2.5 gap-0.5">
+                            <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">
+                                Accuracy</p>
+                            <p id="stat-accuracy" class="text-sm sm:text-lg font-black text-white">--%</p>
+                        </div>
+                    </div>
+                    <button id="try-again-btn"
+                        class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl border border-gray-700 bg-gray-900 text-white text-xs sm:text-sm font-bold whitespace-nowrap hover:border-blue-500 hover:bg-blue-950 hover:text-blue-400 transition-all duration-200 cursor-pointer shrink-0">
+                        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                        </svg>
+                        Try Again
+                    </button>
+                </div>
+
+                <!--GAME BOX-->
+                <div id="game-box"
+                    class="w-full rounded-2xl border border-gray-800 bg-gradient-to-b from-gray-900 to-gray-950 p-2 sm:p-3 shadow-2xl cursor-pointer">
+                    <div class="rounded-xl bg-gray-950 border border-gray-800 flex flex-col justify-center px-6 sm:px-10 py-8 relative"
+                        style="min-height: clamp(280px, 45vh, 520px);">
+
+                        <!-- Hidden textarea captures all keystrokes once focused -->
+                        <textarea id="hidden-input" tabindex="-1" autocomplete="off" autocorrect="off"
+                            autocapitalize="off" spellcheck="false"></textarea>
+
+                        <!-- STATE 1: Idle — shown before user clicks -->
+                        <div id="state-idle" class="flex flex-col items-center justify-center gap-4 absolute inset-0">
+                            <!-- Time selector -->
+                            <div class="flex items-center gap-1 bg-gray-900 border border-gray-800 rounded-lg p-1">
+                                <button
+                                    class="time-opt px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-white hover:bg-gray-800 transition-all"
+                                    data-time="15">15s</button>
+                                <button
+                                    class="time-opt active px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest bg-gray-800 text-white transition-all"
+                                    data-time="30">30s</button>
+                                <button
+                                    class="time-opt px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-white hover:bg-gray-800 transition-all"
+                                    data-time="60">60s</button>
+                                <button
+                                    class="time-opt px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-white hover:bg-gray-800 transition-all"
+                                    data-time="120">120s</button>
+                            </div>
+                            <p class="text-gray-500 text-sm font-medium tracking-wide flex items-center gap-2">
+                                <i class="fa-regular fa-keyboard text-gray-600"></i>
+                                Click to focus, then start typing
                             </p>
                         </div>
-                        <div class="flex items-stretch bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
-                            <div class="flex flex-col items-center justify-center px-4 sm:px-7 py-3 gap-0.5">
-                                <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Accuracy</p>
-                                <p id="result-accuracy" class="text-base sm:text-xl font-black text-white">0%</p>
+
+                        <!-- STATE 2: Ready/Active — shown after click, words visible, typing starts timer -->
+                        <div id="state-active" class="hidden flex-col gap-4 w-full">
+
+                            <!-- Timer row — shows "--" until first key, then counts down -->
+                            <div class="flex items-baseline gap-1.5">
+                                <span id="timer-display"
+                                    class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700 tabular-nums leading-none select-none">--</span>
+                                <span
+                                    class="text-xs font-bold uppercase tracking-widest text-gray-600 select-none">sec</span>
                             </div>
-                            <div class="w-px bg-gray-800"></div>
-                            <div class="flex flex-col items-center justify-center px-4 sm:px-7 py-3 gap-0.5">
-                                <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Correct</p>
-                                <p id="result-correct" class="text-base sm:text-xl font-black text-white">0</p>
+
+                            <!-- 3-line word display -->
+                            <div id="word-area">
+                                <div id="word-inner"></div>
                             </div>
-                            <div class="w-px bg-gray-800"></div>
-                            <div class="flex flex-col items-center justify-center px-4 sm:px-7 py-3 gap-0.5">
-                                <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Errors</p>
-                                <p id="result-errors" class="text-base sm:text-xl font-black text-red-400">0</p>
-                            </div>
-                            <div class="w-px bg-gray-800"></div>
-                            <div class="flex flex-col items-center justify-center px-4 sm:px-7 py-3 gap-0.5">
-                                <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Time</p>
-                                <p id="result-time" class="text-base sm:text-xl font-black text-white">0s</p>
-                            </div>
+
+                            <p class="text-gray-700 text-xs font-medium tracking-widest uppercase select-none">
+                                Start typing · Tab to restart
+                            </p>
                         </div>
-                        <span id="perf-badge"
-                            class="px-5 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border border-blue-900 bg-blue-950 text-blue-400">
-                            Good
-                        </span>
+
+                        <!-- STATE 3: Result — shown when time runs out -->
+                        <div id="state-result" class="hidden flex-col items-center text-center gap-5 w-full">
+                            <div class="flex flex-col items-center gap-1">
+                                <p id="result-wpm"
+                                    class="text-7xl sm:text-8xl lg:text-9xl font-black text-white tabular-nums tracking-tighter leading-none">
+                                    0</p>
+                                <p class="text-xs font-semibold uppercase tracking-widest text-gray-500">Words Per
+                                    Minute</p>
+                            </div>
+                            <div
+                                class="flex items-stretch bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+                                <div class="flex flex-col items-center justify-center px-4 sm:px-7 py-3 gap-0.5">
+                                    <p
+                                        class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">
+                                        Accuracy</p>
+                                    <p id="result-accuracy" class="text-base sm:text-xl font-black text-white">0%</p>
+                                </div>
+                                <div class="w-px bg-gray-800"></div>
+                                <div class="flex flex-col items-center justify-center px-4 sm:px-7 py-3 gap-0.5">
+                                    <p
+                                        class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">
+                                        Correct</p>
+                                    <p id="result-correct" class="text-base sm:text-xl font-black text-white">0</p>
+                                </div>
+                                <div class="w-px bg-gray-800"></div>
+                                <div class="flex flex-col items-center justify-center px-4 sm:px-7 py-3 gap-0.5">
+                                    <p
+                                        class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">
+                                        Errors</p>
+                                    <p id="result-errors" class="text-base sm:text-xl font-black text-red-400">0</p>
+                                </div>
+                                <div class="w-px bg-gray-800"></div>
+                                <div class="flex flex-col items-center justify-center px-4 sm:px-7 py-3 gap-0.5">
+                                    <p
+                                        class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">
+                                        Time</p>
+                                    <p id="result-time" class="text-base sm:text-xl font-black text-white">0s</p>
+                                </div>
+                            </div>
+                            <span id="perf-badge"
+                                class="px-5 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border border-blue-900 bg-blue-950 text-blue-400">Good</span>
+                            <p
+                                class="text-gray-600 text-xl font-semibold uppercase tracking-widest animate-pulse select-none">
+                                Tab or Try Again to restart</p>
+                        </div>
+
                     </div>
-
                 </div>
-            </div>
 
-            <!-- Mode Selector -->
-            <div class="flex items-center justify-center gap-3 mt-4">
-                <span class="text-xs font-bold uppercase tracking-widest text-gray-700">Mode</span>
-                <div class="flex items-center gap-1 bg-gray-900 border border-gray-800 rounded-lg p-1">
-                    <button class="mode-btn px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest bg-gray-800 text-white transition-all duration-150" data-mode="time">Time</button>
-                    <button class="mode-btn px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-white transition-all duration-150" data-mode="words">Words</button>
-                </div>
             </div>
-
-        </div>
-    </section>
-</main>
+        </section>
+    </main>
 
     <!-- Footer -->
     <footer class="bg-gray-950 border-t border-gray-900 pt-20 pb-10">
         <div class="container mx-auto px-6">
-
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-16">
-
                 <div class="lg:col-span-4 space-y-6">
                     <div class="flex items-center space-x-2">
                         <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
@@ -329,12 +448,9 @@
                             Online</span>
                     </div>
                     <h2 class="text-2xl font-bold text-white">Human Metrix</h2>
-                    <p class="text-gray-500 text-sm leading-relaxed max-w-xs">
-                        A data-driven platform designed to quantify human potential through high-fidelity cognitive
-                        benchmarks.
-                    </p>
+                    <p class="text-gray-500 text-sm leading-relaxed max-w-xs">A data-driven platform designed to
+                        quantify human potential through high-fidelity cognitive benchmarks.</p>
                 </div>
-
                 <div class="lg:col-span-5 grid grid-cols-2 gap-8">
                     <div>
                         <h3 class="text-white text-sm font-bold mb-6 uppercase tracking-widest">Benchmarks</h3>
@@ -344,12 +460,13 @@
                             <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Mind Grid</a>
                             </li>
                             <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Typing Speed</a>
+                            </li>
                             <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Aim Trainer</a>
+                            </li>
                             <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Visual
                                     Memory</a></li>
                             <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Number
                                     Memory</a></li>
-                            </li>
                         </ul>
                     </div>
                     <div>
@@ -365,57 +482,48 @@
                         </ul>
                     </div>
                 </div>
-
                 <div class="lg:col-span-3">
                     <h3 class="text-white text-sm font-bold mb-6 uppercase tracking-widest">Report Issue</h3>
                     <div class="space-y-3">
                         <input type="text" placeholder="Describe bug..."
                             class="w-full bg-gray-900/50 border border-gray-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition text-white placeholder:text-gray-600" />
                         <button
-                            class="w-full bg-blue-600/10 border border-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white py-3 rounded-lg text-xs font-black uppercase tracking-widest transition-all">
-                            Submit Report
-                        </button>
+                            class="w-full bg-blue-600/10 border border-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white py-3 rounded-lg text-xs font-black uppercase tracking-widest transition-all">Submit
+                            Report</button>
                     </div>
                 </div>
             </div>
-
             <div class="border-t border-gray-900 pt-10 flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="text-gray-600 text-[11px] uppercase tracking-widest font-medium">
-                    © 2026 Human Metrix // All Rights Reserved
-                </div>
+                <div class="text-gray-600 text-[11px] uppercase tracking-widest font-medium">© 2026 Human Metrix // All
+                    Rights Reserved</div>
                 <div class="flex items-center space-x-3">
                     <a href="#"
                         class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
-                        aria-label="Twitter / X">
-                        <i class="fa-brands fa-x-twitter text-gray-500 group-hover:text-white text-sm"></i>
-                    </a>
+                        aria-label="Twitter / X"><i
+                            class="fa-brands fa-x-twitter text-gray-500 group-hover:text-white text-sm"></i></a>
                     <a href="#"
                         class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
-                        aria-label="Discord">
-                        <i class="fa-brands fa-discord text-gray-500 group-hover:text-white text-sm"></i>
-                    </a>
+                        aria-label="Discord"><i
+                            class="fa-brands fa-discord text-gray-500 group-hover:text-white text-sm"></i></a>
                     <a href="#"
                         class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
-                        aria-label="GitHub">
-                        <i class="fa-brands fa-github text-gray-500 group-hover:text-white text-sm"></i>
-                    </a>
+                        aria-label="GitHub"><i
+                            class="fa-brands fa-github text-gray-500 group-hover:text-white text-sm"></i></a>
                     <a href="#"
                         class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
-                        aria-label="Instagram">
-                        <i class="fa-brands fa-instagram text-gray-500 group-hover:text-white text-sm"></i>
-                    </a>
+                        aria-label="Instagram"><i
+                            class="fa-brands fa-instagram text-gray-500 group-hover:text-white text-sm"></i></a>
                     <a href="#"
                         class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
-                        aria-label="Facebook">
-                        <i class="fa-brands fa-facebook text-gray-500 group-hover:text-white text-sm"></i>
-                    </a>
+                        aria-label="Facebook"><i
+                            class="fa-brands fa-facebook text-gray-500 group-hover:text-white text-sm"></i></a>
                 </div>
             </div>
         </div>
     </footer>
 
     <script src="../script.js"></script>
-
+    <script src="../Game Logic/TypingSpeed.js"></script>
 </body>
 
 </html>

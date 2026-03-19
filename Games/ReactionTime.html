@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Human Metrix</title>
+    <title>Human Metrix - Reaction Time</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -105,6 +105,7 @@
 
             <!-- Desktop Nav -->
             <nav id="desktop-nav" class="items-center gap-x-5 text-sm font-medium">
+                <a href="../index.html" class="hover:text-blue-400 transition whitespace-nowrap">Home</a>
                 <a href="ReactionTime.html" class="text-blue-400 transition whitespace-nowrap">Reaction
                     Time</a>
                 <a href="MindGrid.html" class="hover:text-blue-400 transition whitespace-nowrap">Mind Grid</a>
@@ -112,7 +113,6 @@
                 <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Aim Trainer</a>
                 <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Visual Memory</a>
                 <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Number Memory</a>
-                <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Leaderboard</a>
             </nav>
 
             <!-- Right side: CTA + hamburger -->
@@ -136,6 +136,10 @@
         <div id="mobile-menu" class="bg-gray-900/95 backdrop-blur-md border-b border-gray-800">
             <div class="container mx-auto px-4 sm:px-6 py-5">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 mb-5">
+                    <a href="../index.html"
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium sm:col-span-2">
+                        <i class="fa-solid fa-house w-5 text-blue-400"></i> Home
+                    </a>
                     <a href="ReactionTime.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-bolt-lightning w-5 text-blue-400"></i> Reaction Time
@@ -159,10 +163,6 @@
                     <a href="#"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-hashtag w-5 text-blue-400"></i> Number Memory
-                    </a>
-                    <a href="#"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium sm:col-span-2">
-                        <i class="fa-solid fa-trophy w-5 text-blue-400"></i> Leaderboard
                     </a>
                 </div>
                 <div class="border-t border-gray-800 pt-4">
@@ -368,8 +368,8 @@
             </div>
         </div>
     </footer>
-
     <script src="../script.js"></script>
+    <script src="../Game Logic/ReactionTime.js"></script>
 
 </body>
 
