@@ -1,4 +1,22 @@
-// word pool 
+// ─────────────────────────────────────────────────────────────────────────────
+// Keyboard detection
+// A device is considered "no keyboard" when ALL three signals fire together:
+//   1. It has touch hardware          (maxTouchPoints > 0 or ontouchstart)
+//   2. Primary pointer is coarse      (finger, not mouse)
+//   3. No hover capability            (no mouse present)
+// This avoids false-positives on touch-screen laptops (Surface, touch MacBook),
+// where pointer is "fine" and hover is available even though touch exists.
+// ─────────────────────────────────────────────────────────────────────────────
+const NO_KEYBOARD = (function () {
+    const hasTouch = navigator.maxTouchPoints > 0 || 'ontouchstart' in window;
+    const coarse   = window.matchMedia('(pointer: coarse)').matches;
+    const noHover  = window.matchMedia('(hover: none)').matches;
+    return hasTouch && coarse && noHover;
+}());
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Word pool & constants
+// ─────────────────────────────────────────────────────────────────────────────
 const WORD_POOL = [
     "the","be","to","of","and","a","in","that","have","it","for","not","on","with",
     "he","as","you","do","at","this","but","his","by","from","they","we","say","her",
@@ -21,30 +39,32 @@ const WORD_POOL = [
     "much","before","go","good","new","write","our","used","me","man","too","any","same"
 ];
 
-// generate enough words so timer never runs out
 const WORD_COUNT = 200;
 
-// game states (simple state machine)
+// ─────────────────────────────────────────────────────────────────────────────
+// Game state
+// ─────────────────────────────────────────────────────────────────────────────
 const PHASE = { IDLE: 'idle', READY: 'ready', TYPING: 'typing', DONE: 'done' };
 let phase = PHASE.IDLE;
 
-let words       = [];   // current word list
-let currentWord = 0;    // index of active word
-let typed       = '';   // what user typed for current word
-let wordResults = [];   // true/false per word
+let words       = [];
+let currentWord = 0;
+let typed       = '';
+let wordResults = [];
 
-let selectedTime  = 30; // selected duration
+let selectedTime  = 30;
 let timeLeft      = 30;
 let timerInterval = null;
 
-// track typing stats
 let totalKeys = 0;
 let wrongKeys = 0;
 
-// load best score if exists
 let bestWpm = parseInt(localStorage.getItem('ts_best_wpm')) || null;
 
-// DOM elements
+// ─────────────────────────────────────────────────────────────────────────────
+// DOM references
+// ─────────────────────────────────────────────────────────────────────────────
+const stateNoKb    = document.getElementById('state-no-keyboard');
 const stateIdle    = document.getElementById('state-idle');
 const stateActive  = document.getElementById('state-active');
 const stateResult  = document.getElementById('state-result');
@@ -66,10 +86,37 @@ const resultErrors   = document.getElementById('result-errors');
 const resultTime     = document.getElementById('result-time');
 const perfBadge      = document.getElementById('perf-badge');
 
-// show best score initially
-if (bestWpm) statBest.textContent = bestWpm + ' wpm';
+// ─────────────────────────────────────────────────────────────────────────────
+// Helper: show exactly one panel, hide all others
+// ─────────────────────────────────────────────────────────────────────────────
+function showPanel(panelEl) {
+    [stateNoKb, stateIdle, stateActive, stateResult].forEach(el => {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+    });
+    panelEl.classList.remove('hidden');
+    panelEl.classList.add('flex');
+}
 
-// generate random words
+// ─────────────────────────────────────────────────────────────────────────────
+// Initialise on page load
+// ─────────────────────────────────────────────────────────────────────────────
+(function init() {
+    if (bestWpm) statBest.textContent = bestWpm + ' wpm';
+
+    if (NO_KEYBOARD) {
+        // Lock the game box — nothing interactive should work
+        gameBox.style.cursor = 'default';
+        showPanel(stateNoKb);
+    } else {
+        gameBox.style.cursor = 'pointer';
+        showPanel(stateIdle);
+    }
+}());
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Word generation & DOM build
+// ─────────────────────────────────────────────────────────────────────────────
 function generateWords() {
     const list = [];
     for (let i = 0; i < WORD_COUNT; i++) {
@@ -78,19 +125,18 @@ function generateWords() {
     return list;
 }
 
-// build words into DOM (each letter wrapped for styling)
 function buildWordDOM() {
-    wordInner.innerHTML = '';
-    wordInner.style.top = '0px'; // reset scroll
+    wordInner.innerHTML  = '';
+    wordInner.style.top  = '0px';
 
     words.forEach((word, wi) => {
         const wordEl = document.createElement('span');
-        wordEl.className = 'ts-word';
+        wordEl.className  = 'ts-word';
         wordEl.dataset.wi = wi;
 
         [...word].forEach((ch, ci) => {
             const span = document.createElement('span');
-            span.className = 'ts-letter';
+            span.className  = 'ts-letter';
             span.dataset.ci = ci;
             span.textContent = ch;
             wordEl.appendChild(span);
@@ -100,11 +146,12 @@ function buildWordDOM() {
         wordInner.appendChild(document.createTextNode(' '));
     });
 
-    // start cursor at first letter
     setCursor(0, 0);
 }
 
-// move cursor visually
+// ─────────────────────────────────────────────────────────────────────────────
+// Cursor
+// ─────────────────────────────────────────────────────────────────────────────
 function setCursor(wordIdx, charIdx) {
     wordInner.querySelectorAll('.cursor').forEach(el => el.classList.remove('cursor'));
     wordInner.querySelectorAll('.cursor-after').forEach(el => el.classList.remove('cursor-after'));
@@ -120,14 +167,15 @@ function setCursor(wordIdx, charIdx) {
     }
 }
 
-// update coloring of letters while typing
+// ─────────────────────────────────────────────────────────────────────────────
+// Repaint current word
+// ─────────────────────────────────────────────────────────────────────────────
 function repaintWord() {
     const wordEl = wordInner.querySelector(`[data-wi="${currentWord}"]`);
     if (!wordEl) return;
 
     const target = words[currentWord];
 
-    // remove overflow letters from previous frame
     wordEl.querySelectorAll('.extra').forEach(el => el.remove());
 
     const letters = wordEl.querySelectorAll('.ts-letter');
@@ -138,10 +186,9 @@ function repaintWord() {
         }
     });
 
-    // show extra typed chars if user goes beyond word length
     for (let i = target.length; i < typed.length; i++) {
         const extra = document.createElement('span');
-        extra.className = 'ts-letter extra';
+        extra.className  = 'ts-letter extra';
         extra.textContent = typed[i];
         wordEl.appendChild(extra);
     }
@@ -150,7 +197,9 @@ function repaintWord() {
     scrollCheck();
 }
 
-// auto scroll when user moves to next line
+// ─────────────────────────────────────────────────────────────────────────────
+// Auto-scroll
+// ─────────────────────────────────────────────────────────────────────────────
 function scrollCheck() {
     const wordEl = wordInner.querySelector(`[data-wi="${currentWord}"]`);
     if (!wordEl) return;
@@ -165,7 +214,9 @@ function scrollCheck() {
     }
 }
 
-// handle word completion (on space)
+// ─────────────────────────────────────────────────────────────────────────────
+// Commit word on spacebar
+// ─────────────────────────────────────────────────────────────────────────────
 function commitWord() {
     if (typed.trim() === '') return;
 
@@ -184,7 +235,9 @@ function commitWord() {
     scrollCheck();
 }
 
-// start countdown timer
+// ─────────────────────────────────────────────────────────────────────────────
+// Timer
+// ─────────────────────────────────────────────────────────────────────────────
 function startTimer() {
     timeLeft = selectedTime;
     timerDisplay.textContent = timeLeft;
@@ -194,10 +247,8 @@ function startTimer() {
         timeLeft--;
         timerDisplay.textContent = timeLeft;
 
-        // highlight last few seconds
         if (timeLeft <= 5) timerDisplay.classList.add('timer-danger');
 
-        // live WPM update
         const elapsed = selectedTime - timeLeft;
         if (elapsed > 0) {
             const liveWpm = Math.round((wordResults.filter(r => r === true).length / elapsed) * 60);
@@ -208,7 +259,9 @@ function startTimer() {
     }, 1000);
 }
 
-// simple performance tiers
+// ─────────────────────────────────────────────────────────────────────────────
+// Performance badge
+// ─────────────────────────────────────────────────────────────────────────────
 function getBadge(wpm) {
     if (wpm >= 100) return { label: 'Speed Demon',     border: 'border-purple-700', bg: 'bg-purple-950', text: 'text-purple-400' };
     if (wpm >= 70)  return { label: 'Fast',            border: 'border-blue-700',   bg: 'bg-blue-950',   text: 'text-blue-400'   };
@@ -217,7 +270,9 @@ function getBadge(wpm) {
     return                 { label: 'Keep Practicing', border: 'border-red-900',    bg: 'bg-red-950',    text: 'text-red-400'    };
 }
 
-// finish game and calculate stats
+// ─────────────────────────────────────────────────────────────────────────────
+// End game
+// ─────────────────────────────────────────────────────────────────────────────
 function endGame() {
     clearInterval(timerInterval);
     phase = PHASE.DONE;
@@ -226,8 +281,7 @@ function endGame() {
     const correctWords = wordResults.filter(r => r === true).length;
     const wrongWords   = wordResults.filter(r => r === false).length;
     const wpm          = Math.round((correctWords / selectedTime) * 60);
-
-    const accuracy = totalKeys > 0
+    const accuracy     = totalKeys > 0
         ? Math.round(((totalKeys - wrongKeys) / totalKeys) * 100)
         : 100;
 
@@ -250,42 +304,45 @@ function endGame() {
     perfBadge.className   = `px-5 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border ${badge.border} ${badge.bg} ${badge.text}`;
     perfBadge.textContent = badge.label;
 
-    stateActive.classList.add('hidden');
-    stateActive.classList.remove('flex');
-    stateResult.classList.remove('hidden');
-    stateResult.classList.add('flex');
+    showPanel(stateResult);
 }
 
-// reset everything back to start
+// ─────────────────────────────────────────────────────────────────────────────
+// Reset — always returns to no-keyboard panel on touch-only devices
+// ─────────────────────────────────────────────────────────────────────────────
 function resetToIdle() {
     clearInterval(timerInterval);
-    phase         = PHASE.IDLE;
-    currentWord   = 0;
-    typed         = '';
-    wordResults   = [];
-    totalKeys     = 0;
-    wrongKeys     = 0;
-    timeLeft      = selectedTime;
+
+    phase       = PHASE.IDLE;
+    currentWord = 0;
+    typed       = '';
+    wordResults = [];
+    totalKeys   = 0;
+    wrongKeys   = 0;
+    timeLeft    = selectedTime;
 
     timerDisplay.textContent = '--';
     timerDisplay.classList.remove('timer-danger');
     statWpm.textContent      = '--';
     statAccuracy.textContent = '--%';
+    hiddenInput.value        = '';
 
-    hiddenInput.value = '';
-
-    stateResult.classList.add('hidden');
-    stateResult.classList.remove('flex');
-    stateActive.classList.add('hidden');
-    stateActive.classList.remove('flex');
-    stateIdle.classList.remove('hidden');
-    stateIdle.classList.add('flex');
-
-    gameBox.style.cursor = 'pointer';
+    if (NO_KEYBOARD) {
+        // Touch-only: always land back on the no-keyboard screen
+        gameBox.style.cursor = 'default';
+        showPanel(stateNoKb);
+    } else {
+        gameBox.style.cursor = 'pointer';
+        showPanel(stateIdle);
+    }
 }
 
-// start game (idle → ready)
+// ─────────────────────────────────────────────────────────────────────────────
+// Activate (idle → ready)
+// ─────────────────────────────────────────────────────────────────────────────
 function activateBox() {
+    if (NO_KEYBOARD) return;   // should never reach here, but belt-and-braces
+
     phase = PHASE.READY;
     gameBox.style.cursor = 'text';
 
@@ -296,22 +353,21 @@ function activateBox() {
     totalKeys   = 0;
     wrongKeys   = 0;
 
-    stateIdle.classList.add('hidden');
-    stateIdle.classList.remove('flex');
-    stateResult.classList.add('hidden');
-    stateResult.classList.remove('flex');
-    stateActive.classList.remove('hidden');
-    stateActive.classList.add('flex');
-
     timerDisplay.textContent = '--';
     timerDisplay.classList.remove('timer-danger');
 
+    showPanel(stateActive);
     buildWordDOM();
     hiddenInput.focus();
 }
 
-// click handling
+// ─────────────────────────────────────────────────────────────────────────────
+// Event listeners
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Game box click
 gameBox.addEventListener('click', () => {
+    if (NO_KEYBOARD) return;
     if (phase === PHASE.IDLE) {
         activateBox();
     } else if (phase === PHASE.READY || phase === PHASE.TYPING) {
@@ -319,8 +375,9 @@ gameBox.addEventListener('click', () => {
     }
 });
 
-// main typing logic
+// Typing
 hiddenInput.addEventListener('keydown', (e) => {
+    if (NO_KEYBOARD) return;
 
     if (e.key === 'Tab') {
         e.preventDefault();
@@ -346,16 +403,14 @@ hiddenInput.addEventListener('keydown', (e) => {
     }
 
     if (e.key.length === 1) {
-
         if (phase === PHASE.READY) {
             phase = PHASE.TYPING;
             startTimer();
         }
 
-        const target = words[currentWord];
-        totalKeys++;
-
+        const target   = words[currentWord];
         const expected = target[typed.length];
+        totalKeys++;
         if (!expected || e.key !== expected) wrongKeys++;
 
         if (typed.length < target.length + 20) {
@@ -366,21 +421,22 @@ hiddenInput.addEventListener('keydown', (e) => {
     }
 });
 
-// keep textarea empty always
+// Keep textarea always empty (prevent system autocomplete interfering)
 hiddenInput.addEventListener('input', () => {
     hiddenInput.value = '';
 });
 
-// retry button
+// Try Again button
 tryAgainBtn.addEventListener('click', () => {
+    if (NO_KEYBOARD) return;   // silently ignore on touch-only devices
     resetToIdle();
 });
 
-// time selection buttons
+// Time selector buttons
 document.querySelectorAll('.time-opt').forEach(btn => {
     btn.addEventListener('click', (e) => {
         e.stopPropagation();
-
+        if (NO_KEYBOARD) return;
         if (phase === PHASE.TYPING) return;
 
         selectedTime = parseInt(btn.dataset.time);
