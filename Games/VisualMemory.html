@@ -2,367 +2,447 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visual Memory – Human Metrix</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        /* ── hamburger ── */
-        #mobile-menu {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease-out;
-        }
-        #mobile-menu.open { max-height: 500px; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visual Memory – Human Metrix</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* ── hamburger ── */
+    #mobile-menu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-out;
+    }
 
-        #menu-toggle .bar {
-            display: block; width: 22px; height: 2px;
-            background: currentColor; border-radius: 2px;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-            transform-origin: center;
-        }
-        #menu-toggle.open .bar:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-        #menu-toggle.open .bar:nth-child(2) { opacity: 0; transform: scaleX(0); }
-        #menu-toggle.open .bar:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+    #mobile-menu.open {
+      max-height: 500px;
+    }
 
-        #desktop-nav    { display: none; }
-        #menu-toggle    { display: flex; }
-        #start-btn-desktop { display: none; }
+    #menu-toggle .bar {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: currentColor;
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      transform-origin: center;
+    }
 
-        @media (min-width: 1400px) {
-            #desktop-nav       { display: flex; }
-            #mobile-menu       { display: none !important; }
-            #menu-toggle       { display: none; }
-            #start-btn-desktop { display: inline-flex; }
-        }
+    #menu-toggle.open .bar:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
 
-        /* ── game states ── */
-        .state { display: none; flex-direction: column; align-items: center; }
-        .state.active { display: flex; }
+    #menu-toggle.open .bar:nth-child(2) {
+      opacity: 0;
+      transform: scaleX(0);
+    }
 
-        /* ── badge ── */
-        .level-badge {
-            display: inline-block; font-size: 11px; font-weight: 700;
-            letter-spacing: .12em; text-transform: uppercase; color: #60a5fa;
-            background: rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.25);
-            border-radius: 999px; padding: 5px 18px;
-        }
+    #menu-toggle.open .bar:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
 
-        /* ── word display ── */
-        #word-display {
-            font-size: clamp(2.4rem, 10vw, 4rem);
-            font-weight: 900;
-            color: #fff;
-            letter-spacing: .05em;
-            text-transform: uppercase;
-            opacity: 1;
-            transform: scale(1) translateY(0);
-        }
+    #desktop-nav {
+      display: none;
+    }
 
-        /* ── answer buttons ── */
-        .answer-btn {
-            padding: 14px 0;
-            width: 140px;
-            border-radius: 999px;
-            font-weight: 700;
-            font-size: .95rem;
-            border: none;
-            cursor: pointer;
-            transition: background .2s, transform .1s, opacity .2s;
-        }
-        .answer-btn:active { transform: scale(0.96); }
-        .answer-btn:disabled { opacity: .4; cursor: not-allowed; }
+    #menu-toggle {
+      display: flex;
+    }
 
-        .btn-seen {
-            background: #3b82f6; color: #fff;
-        }
-        .btn-seen:hover:not(:disabled) { background: #2563eb; }
+    #start-btn-desktop {
+      display: none;
+    }
 
-        .btn-new-word {
-            background: rgba(255,255,255,.08);
-            color: #fff;
-            border: 1.5px solid rgba(255,255,255,.15) !important;
-        }
-        .btn-new-word:hover:not(:disabled) { background: rgba(255,255,255,.14); }
+    @media (min-width: 1400px) {
+      #desktop-nav {
+        display: flex;
+      }
 
-        /* ── feedback btn variants ── */
-        .btn-continue {
-            background: #34d399 !important; color: #030712 !important; border: none !important;
-        }
-        .btn-continue:hover { background: #10b981 !important; }
+      #mobile-menu {
+        display: none !important;
+      }
 
-        .btn-retry {
-            background: rgba(248,113,113,.1) !important; color: #f87171 !important;
-            border: 1px solid rgba(248,113,113,.3) !important;
-        }
-        .btn-retry:hover { background: rgba(248,113,113,.2) !important; }
+      #menu-toggle {
+        display: none;
+      }
 
-        /* ── kbd hint ── */
-        .kbd {
-            display: inline-block; font-size: 10px; font-weight: 700;
-            background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12);
-            border-radius: 5px; padding: 2px 7px; letter-spacing: .06em;
-            color: #9ca3af; vertical-align: middle;
-        }
-    </style>
+      #start-btn-desktop {
+        display: inline-flex;
+      }
+    }
+
+    /* ── game states ── */
+    .state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .state.active {
+      display: flex;
+    }
+
+    /* ── badge ── */
+    .level-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: #60a5fa;
+      background: rgba(59, 130, 246, .1);
+      border: 1px solid rgba(59, 130, 246, .25);
+      border-radius: 999px;
+      padding: 5px 18px;
+    }
+
+    /* ── word display ── */
+    #word-display {
+      font-size: clamp(2.4rem, 10vw, 4rem);
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+    /* ── answer buttons ── */
+    .answer-btn {
+      padding: 14px 0;
+      width: 140px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: .95rem;
+      border: none;
+      cursor: pointer;
+      transition: background .2s, transform .1s, opacity .2s;
+    }
+
+    .answer-btn:active {
+      transform: scale(0.96);
+    }
+
+    .answer-btn:disabled {
+      opacity: .4;
+      cursor: not-allowed;
+    }
+
+    .btn-seen {
+      background: #3b82f6;
+      color: #fff;
+    }
+
+    .btn-seen:hover:not(:disabled) {
+      background: #2563eb;
+    }
+
+    .btn-new-word {
+      background: rgba(255, 255, 255, .08);
+      color: #fff;
+      border: 1.5px solid rgba(255, 255, 255, .15) !important;
+    }
+
+    .btn-new-word:hover:not(:disabled) {
+      background: rgba(255, 255, 255, .14);
+    }
+
+    /* ── feedback btn variants ── */
+    .btn-continue {
+      background: #34d399 !important;
+      color: #030712 !important;
+      border: none !important;
+    }
+
+    .btn-continue:hover {
+      background: #10b981 !important;
+    }
+
+    .btn-retry {
+      background: rgba(248, 113, 113, .1) !important;
+      color: #f87171 !important;
+      border: 1px solid rgba(248, 113, 113, .3) !important;
+    }
+
+    .btn-retry:hover {
+      background: rgba(248, 113, 113, .2) !important;
+    }
+
+    /* ── kbd hint ── */
+    .kbd {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, .07);
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 5px;
+      padding: 2px 7px;
+      letter-spacing: .06em;
+      color: #9ca3af;
+      vertical-align: middle;
+    }
+  </style>
 </head>
 
 <body class="bg-gray-950 text-gray-300 flex flex-col min-h-screen font-sans selection:bg-blue-500/30">
 
-    <!-- ═══════════════════════════ NAVBAR ═══════════════════════════ -->
-    <header class="bg-gray-900/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
-        <div class="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-4">
+  <!-- ═══════════════════════════ NAVBAR ═══════════════════════════ -->
+  <header class="bg-gray-900/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
+    <div class="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-4">
 
-            <!-- Logo -->
-            <div class="flex items-center shrink-0">
-                <a href="../index.html" class="flex items-center group">
-                    <img src="../Images/logo.png" alt="Human Metrix Logo"
-                        class="h-8 md:h-10 w-auto transition-all duration-300 group-hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]">
-                    <h1 class="ml-2 md:ml-3 text-base md:text-xl font-bold text-white tracking-tight whitespace-nowrap">
-                        Human <span class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Metrix</span>
-                    </h1>
-                </a>
-            </div>
+      <!-- Logo -->
+      <div class="flex items-center shrink-0">
+        <a href="../index.html" class="flex items-center group">
+          <img src="../Images/logo.png" alt="Human Metrix Logo"
+            class="h-8 md:h-10 w-auto transition-all duration-300 group-hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]">
+          <h1 class="ml-2 md:ml-3 text-base md:text-xl font-bold text-white tracking-tight whitespace-nowrap">
+            Human <span class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Metrix</span>
+          </h1>
+        </a>
+      </div>
 
-            <!-- Desktop Nav -->
-            <nav id="desktop-nav" class="items-center gap-x-5 text-sm font-medium text-gray-300">
-                <a href="../index.html"         class="hover:text-blue-400 transition whitespace-nowrap">Home</a>
-                <a href="ReactionTime.html"     class="hover:text-blue-400 transition whitespace-nowrap">Reaction Time</a>
-                <a href="MindGrid.html"         class="hover:text-blue-400 transition whitespace-nowrap">Mind Grid</a>
-                <a href="TypingSpeed.html"      class="hover:text-blue-400 transition whitespace-nowrap">Typing Speed</a>
-                <a href="AimTrainer.html"       class="hover:text-blue-400 transition whitespace-nowrap">Aim Trainer</a>
-                <a href="VisualMemory.html"     class="hover:text-blue-400 transition whitespace-nowrap">Visual Memory</a>
-                <a href="NumberMemory.html"     class="hover:text-blue-400 transition whitespace-nowrap">Number Memory</a>
-            </nav>
+      <!-- Desktop Nav -->
+      <nav id="desktop-nav" class="items-center gap-x-5 text-sm font-medium text-gray-300">
+        <a href="../index.html" class="hover:text-blue-400 transition whitespace-nowrap">Home</a>
+        <a href="ReactionTime.html" class="hover:text-blue-400 transition whitespace-nowrap">Reaction Time</a>
+        <a href="MindGrid.html" class="hover:text-blue-400 transition whitespace-nowrap">Mind Grid</a>
+        <a href="TypingSpeed.html" class="hover:text-blue-400 transition whitespace-nowrap">Typing Speed</a>
+        <a href="AimTrainer.html" class="hover:text-blue-400 transition whitespace-nowrap">Aim Trainer</a>
+        <a href="VisualMemory.html" class="hover:text-blue-400 transition whitespace-nowrap">Visual Memory</a>
+        <a href="NumberMemory.html" class="hover:text-blue-400 transition whitespace-nowrap">Number Memory</a>
+      </nav>
 
-            <!-- Right: CTA + hamburger -->
-            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-                <button id="start-btn-desktop"
-                    class="bg-blue-600 hover:bg-blue-500 text-white px-4 sm:px-5 py-2 rounded-full text-sm font-semibold transition shadow-lg shadow-blue-900/20 whitespace-nowrap"
-                    onclick="startGame()">
-                    Start Test
-                </button>
-                <button id="menu-toggle"
-                    class="flex flex-col justify-center items-center gap-[5px] w-9 h-9 p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none transition-colors">
-                    <span class="bar"></span><span class="bar"></span><span class="bar"></span>
-                </button>
-            </div>
+      <!-- Right: CTA + hamburger -->
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        <button id="start-btn-desktop"
+          class="bg-blue-600 hover:bg-blue-500 text-white px-4 sm:px-5 py-2 rounded-full text-sm font-semibold transition shadow-lg shadow-blue-900/20 whitespace-nowrap"
+          onclick="startGame()">
+          Start Test
+        </button>
+        <button id="menu-toggle"
+          class="flex flex-col justify-center items-center gap-[5px] w-9 h-9 p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none transition-colors">
+          <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile dropdown -->
+    <div id="mobile-menu" class="bg-gray-900/95 backdrop-blur-md border-b border-gray-800">
+      <div class="container mx-auto px-4 sm:px-6 py-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 mb-5">
+          <a href="../index.html"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i
+              class="fa-solid fa-house w-5 text-blue-400"></i> Home</a>
+          <a href="ReactionTime.html"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i
+              class="fa-solid fa-bolt-lightning w-5 text-blue-400"></i> Reaction Time</a>
+          <a href="MindGrid.html"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i
+              class="fa-solid fa-brain w-5 text-blue-400"></i> Mind Grid</a>
+          <a href="TypingSpeed.html"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i
+              class="fa-regular fa-keyboard w-5 text-blue-400"></i> Typing Speed</a>
+          <a href="AimTrainer.html"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i
+              class="fa-solid fa-crosshairs w-5 text-blue-400"></i> Aim Trainer</a>
+          <a href="VisualMemory.html"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i
+              class="fa-solid fa-eye w-5 text-blue-400"></i> Visual Memory</a>
+          <a href="NumberMemory.html"
+            class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i
+              class="fa-solid fa-hashtag w-5 text-blue-400"></i> Number Memory</a>
+        </div>
+        <div class="border-t border-gray-800 pt-4">
+          <button onclick="startGame()"
+            class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white px-8 py-2.5 rounded-xl font-bold text-sm transition">
+            Start Test
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
+  <main class="flex-grow flex items-center justify-center px-4 py-10 sm:py-16 min-h-[70vh]">
+    <div id="game-wrap" class="w-full max-w-xl text-center">
+
+      <!-- IDLE -->
+      <div id="s-idle" class="state active gap-6">
+        <span class="level-badge">Visual Memory</span>
+
+        <h1 class="text-3xl sm:text-5xl font-black text-white leading-tight">
+          Have you seen this word before?
+        </h1>
+
+        <button id="btn-start-idle"
+          class="bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-blue-500 hover:text-white transition">
+          Start Test
+        </button>
+
+        <p class="text-xs text-gray-500">
+          Press <span class="kbd">S</span> = Seen | <span class="kbd">N</span> = New
+        </p>
+      </div>
+
+      <!-- GAME -->
+      <div id="s-game" class="state gap-8">
+
+        <!-- TOP BAR -->
+        <div class="flex justify-between items-center w-full max-w-md mx-auto">
+          <span id="game-level-lbl" class="level-badge">Level 1</span>
+          <span id="lives" class="text-red-400 text-xl font-bold">❤️❤️</span>
         </div>
 
-        <!-- Mobile dropdown -->
-        <div id="mobile-menu" class="bg-gray-900/95 backdrop-blur-md border-b border-gray-800">
-            <div class="container mx-auto px-4 sm:px-6 py-5">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 mb-5">
-                    <a href="../index.html"     class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i class="fa-solid fa-house w-5 text-blue-400"></i> Home</a>
-                    <a href="ReactionTime.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i class="fa-solid fa-bolt-lightning w-5 text-blue-400"></i> Reaction Time</a>
-                    <a href="MindGrid.html"     class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i class="fa-solid fa-brain w-5 text-blue-400"></i> Mind Grid</a>
-                    <a href="TypingSpeed.html"  class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i class="fa-regular fa-keyboard w-5 text-blue-400"></i> Typing Speed</a>
-                    <a href="AimTrainer.html"   class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i class="fa-solid fa-crosshairs w-5 text-blue-400"></i> Aim Trainer</a>
-                    <a href="VisualMemory.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i class="fa-solid fa-eye w-5 text-blue-400"></i> Visual Memory</a>
-                    <a href="NumberMemory.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium"><i class="fa-solid fa-hashtag w-5 text-blue-400"></i> Number Memory</a>
-                </div>
-                <div class="border-t border-gray-800 pt-4">
-                    <button onclick="startGame()"
-                        class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white px-8 py-2.5 rounded-xl font-bold text-sm transition">
-                        Start Test
-                    </button>
-                </div>
-            </div>
+        <!-- WORD CARD -->
+        <div id="word-card" class="relative w-full max-w-md mx-auto h-[150px] sm:h-[190px]
+                 flex items-center justify-center rounded-2xl
+                 border border-gray-700 bg-gradient-to-br from-gray-900 to-gray-800
+                 shadow-[0_0_40px_rgba(59,130,246,0.1)] overflow-hidden">
+
+          <!-- glow -->
+          <div id="card-glow" class="absolute inset-0 blur-2xl opacity-0 transition duration-300">
+          </div>
+
+          <!-- WORD -->
+          <div id="word-display"
+            class="text-4xl sm:text-6xl font-black text-white tracking-wider transition-all duration-300">
+            —
+          </div>
         </div>
-    </header>
 
-    <!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
-    <main class="flex-grow flex items-center justify-center px-4 py-16 min-h-[70vh]">
-        <div id="game-wrap" class="w-full max-w-xl text-center">
+        <!-- BUTTONS -->
+        <div class="flex flex-col sm:flex-row gap-4 w-full max-w-md mx-auto">
+          <button id="btn-seen"
+            class="flex-1 py-4 rounded-xl font-bold bg-blue-600 hover:bg-blue-500 active:scale-95 transition text-white">
+            Seen (S)
+          </button>
 
-            <!-- ── IDLE ── -->
-            <div id="s-idle" class="state active gap-6">
-                <span class="level-badge">Visual Memory</span>
-                <h1 style="font-size: clamp(2.4rem, 8vw, 4.5rem); font-weight: 900; color: #fff; letter-spacing: -.03em; line-height: 1.05;">
-                    Have you seen<br>this word before?
-                </h1>
-                <p style="color:#6b7280; font-size:1.05rem; max-width:340px; line-height:1.65;">
-                    A word appears on screen. Decide whether you've seen it in this session or if it's brand new. One wrong answer ends the game.
-                </p>
-                <div style="width:40px; height:1px; background:rgba(255,255,255,.08);"></div>
-                <!-- How to play mini-hints -->
-                <div style="display:flex; gap:24px; justify-content:center; flex-wrap:wrap;">
-                    <div style="text-align:center;">
-                        <div style="font-size:1.6rem; margin-bottom:4px;">👁️</div>
-                        <div style="font-size:.78rem; color:#6b7280;">Watch words</div>
-                    </div>
-                    <div style="text-align:center;">
-                        <div style="font-size:1.6rem; margin-bottom:4px;">🔁</div>
-                        <div style="font-size:.78rem; color:#6b7280;">Spot repeats</div>
-                    </div>
-                    <div style="text-align:center;">
-                        <div style="font-size:1.6rem; margin-bottom:4px;">⚡</div>
-                        <div style="font-size:.78rem; color:#6b7280;">No mistakes</div>
-                    </div>
-                </div>
-                <button id="btn-start-idle"
-                    style="background:#fff; color:#030712; padding:14px 36px; border-radius:999px; font-weight:700; font-size:.95rem; border:none; cursor:pointer; transition:background .2s, color .2s;"
-                    onmouseover="this.style.background='#3b82f6';this.style.color='#fff'"
-                    onmouseout="this.style.background='#fff';this.style.color='#030712'">
-                    Start Test
-                </button>
-                <p style="font-size:.75rem; color:#4b5563;">
-                    Keyboard: <span class="kbd">S</span> Seen &nbsp; <span class="kbd">N</span> New
-                </p>
-            </div>
-
-            <!-- ── GAME ── -->
-            <div id="s-game" class="state gap-8">
-                <span class="level-badge" id="game-level-lbl">Level 1</span>
-
-                <!-- Word card -->
-                <div style="width:100%; max-width:420px; min-height:160px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.09); border-radius:20px; display:flex; align-items:center; justify-content:center; padding:2rem;">
-                    <div id="word-display">—</div>
-                </div>
-
-                <!-- Buttons row -->
-                <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
-                    <button class="answer-btn btn-seen" id="btn-seen" onclick="handleAnswer('seen')">
-                        <i class="fa-solid fa-eye mr-2"></i>Seen
-                        <span class="kbd" style="margin-left:6px;">S</span>
-                    </button>
-                    <button class="answer-btn btn-new-word" id="btn-new" onclick="handleAnswer('new')">
-                        <i class="fa-solid fa-plus mr-2"></i>New
-                        <span class="kbd" style="margin-left:6px;">N</span>
-                    </button>
-                </div>
-
-                <p style="font-size:.75rem; color:#4b5563; margin-top:-8px;">
-                    Have you seen this word before in this session?
-                </p>
-            </div>
-
-            <!-- ── FEEDBACK ── -->
-            <div id="s-feedback" class="state gap-5">
-                <div id="fb-icon"  style="font-size:3.5rem; line-height:1; font-weight:900;"></div>
-                <div id="fb-title" style="font-size:1.6rem; font-weight:900;"></div>
-                <div id="fb-detail" style="font-size:.9rem; color:#9ca3af;"></div>
-                <div id="fb-word"  style="font-size:clamp(1.8rem,7vw,3rem); font-weight:900; letter-spacing:.08em; text-transform:uppercase;"></div>
-                <button id="btn-next"
-                    style="margin-top:8px; padding:13px 40px; border-radius:999px; font-weight:700; font-size:.95rem; cursor:pointer; transition:background .2s; border:none;">
-                </button>
-            </div>
-
-            <!-- ── GAME OVER ── -->
-            <div id="s-gameover" class="state gap-6">
-                <span class="level-badge">Test Complete</span>
-                <h2 style="font-size:clamp(2.2rem,8vw,3.8rem); font-weight:900; color:#fff; letter-spacing:-.03em; line-height:1.05;">
-                    You reached<br>Level <span id="go-level">—</span>
-                </h2>
-
-                <div style="display:flex; gap:16px; flex-wrap:wrap; justify-content:center; width:100%; max-width:360px;">
-                    <!-- Score -->
-                    <div style="flex:1; min-width:120px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:1.25rem 1.5rem; text-align:center;">
-                        <p style="font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:#6b7280; margin-bottom:6px;">Correct</p>
-                        <p id="go-score" style="font-size:3rem; font-weight:900; color:#34d399;">—</p>
-                    </div>
-                    <!-- Accuracy -->
-                    <div style="flex:1; min-width:120px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:1.25rem 1.5rem; text-align:center;">
-                        <p style="font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:#6b7280; margin-bottom:6px;">Accuracy</p>
-                        <p id="go-accuracy" style="font-size:3rem; font-weight:900; color:#fff;">—</p>
-                    </div>
-                </div>
-
-                <p style="font-size:.875rem; color:#6b7280;">
-                    Missed word: <span id="go-missed" style="color:#f87171; font-weight:700; font-size:1.1rem; letter-spacing:.08em; text-transform:uppercase;"></span>
-                </p>
-                <button id="btn-restart"
-                    style="background:#fff; color:#030712; padding:14px 36px; border-radius:999px; font-weight:700; font-size:.95rem; border:none; cursor:pointer; transition:background .2s, color .2s;"
-                    onmouseover="this.style.background='#3b82f6';this.style.color='#fff'"
-                    onmouseout="this.style.background='#fff';this.style.color='#030712'">
-                    Try Again
-                </button>
-            </div>
-
+          <button id="btn-new"
+            class="flex-1 py-4 rounded-xl font-bold border border-gray-600 hover:bg-gray-800 active:scale-95 transition text-white">
+            New (N)
+          </button>
         </div>
-    </main>
 
-    <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
-    <footer class="bg-gray-950 border-t border-gray-900 pt-20 pb-10">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-16">
+      </div>
 
-                <div class="lg:col-span-4 space-y-6">
-                    <div class="flex items-center space-x-2">
-                        <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                        <span class="text-white font-bold tracking-widest uppercase text-xs">System Status: Online</span>
-                    </div>
-                    <h2 class="text-2xl font-bold text-white">Human Metrix</h2>
-                    <p class="text-gray-500 text-sm leading-relaxed max-w-xs">
-                        A data-driven platform designed to quantify human potential through high-fidelity cognitive benchmarks.
-                    </p>
-                </div>
+      <!-- GAME OVER -->
+      <div id="s-gameover" class="state gap-6">
+        <span class="level-badge">Game Over</span>
 
-                <div class="lg:col-span-5 grid grid-cols-2 gap-8">
-                    <div>
-                        <h3 class="text-white text-sm font-bold mb-6 uppercase tracking-widest">Benchmarks</h3>
-                        <ul class="space-y-4 text-sm">
-                            <li><a href="ReactionTime.html" class="text-gray-500 hover:text-blue-400 transition-colors">Reaction Time</a></li>
-                            <li><a href="MindGrid.html"     class="text-gray-500 hover:text-blue-400 transition-colors">Mind Grid</a></li>
-                            <li><a href="TypingSpeed.html"  class="text-gray-500 hover:text-blue-400 transition-colors">Typing Speed</a></li>
-                            <li><a href="AimTrainer.html"   class="text-gray-500 hover:text-blue-400 transition-colors">Aim Trainer</a></li>
-                            <li><a href="VisualMemory.html" class="text-gray-500 hover:text-blue-400 transition-colors">Visual Memory</a></li>
-                            <li><a href="NumberMemory.html" class="text-gray-500 hover:text-blue-400 transition-colors">Number Memory</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h3 class="text-white text-sm font-bold mb-6 uppercase tracking-widest">Platform</h3>
-                        <ul class="space-y-4 text-sm">
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Leaderboards</a></li>
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Global Stats</a></li>
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">API Access</a></li>
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Privacy</a></li>
-                        </ul>
-                    </div>
-                </div>
+        <h2 class="text-3xl sm:text-5xl font-black text-white">
+          Level <span id="go-level">0</span>
+        </h2>
 
-                <div class="lg:col-span-3">
-                    <h3 class="text-white text-sm font-bold mb-6 uppercase tracking-widest">Report Issue</h3>
-                    <div class="space-y-3">
-                        <input type="text" placeholder="Describe bug..."
-                            class="w-full bg-gray-900/50 border border-gray-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition text-white placeholder:text-gray-600" />
-                        <button class="w-full bg-blue-600/10 border border-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white py-3 rounded-lg text-xs font-black uppercase tracking-widest transition-all">
-                            Submit Report
-                        </button>
-                    </div>
-                </div>
-            </div>
+        <p class="text-gray-400">
+          Missed: <span id="go-missed" class="text-red-400 font-bold"></span>
+        </p>
 
-            <div class="border-t border-gray-900 pt-10 flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="text-gray-600 text-[11px] uppercase tracking-widest font-medium">
-                    © 2026 Human Metrix // All Rights Reserved
-                </div>
-                <div class="flex items-center space-x-3">
-                    <a href="#" class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group" aria-label="Twitter / X">
-                        <i class="fa-brands fa-x-twitter text-gray-500 group-hover:text-white text-sm"></i>
-                    </a>
-                    <a href="#" class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group" aria-label="Discord">
-                        <i class="fa-brands fa-discord text-gray-500 group-hover:text-white text-sm"></i>
-                    </a>
-                    <a href="#" class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group" aria-label="GitHub">
-                        <i class="fa-brands fa-github text-gray-500 group-hover:text-white text-sm"></i>
-                    </a>
-                    <a href="#" class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group" aria-label="Instagram">
-                        <i class="fa-brands fa-instagram text-gray-500 group-hover:text-white text-sm"></i>
-                    </a>
-                    <a href="#" class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group" aria-label="Facebook">
-                        <i class="fa-brands fa-facebook text-gray-500 group-hover:text-white text-sm"></i>
-                    </a>
-                </div>
-            </div>
+        <button id="btn-restart"
+          class="bg-white text-black px-8 py-3 rounded-full font-bold hover:bg-blue-500 hover:text-white transition">
+          Try Again
+        </button>
+      </div>
+
+    </div>
+  </main>
+  <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+  <footer class="bg-gray-950 border-t border-gray-900 pt-20 pb-10">
+    <div class="container mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-16">
+
+        <div class="lg:col-span-4 space-y-6">
+          <div class="flex items-center space-x-2">
+            <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+            <span class="text-white font-bold tracking-widest uppercase text-xs">System Status: Online</span>
+          </div>
+          <h2 class="text-2xl font-bold text-white">Human Metrix</h2>
+          <p class="text-gray-500 text-sm leading-relaxed max-w-xs">
+            A data-driven platform designed to quantify human potential through high-fidelity cognitive benchmarks.
+          </p>
         </div>
-    </footer>
 
-    <!-- ═══════════════════════════ SCRIPT ═══════════════════════════ -->
-    <script src="../Game Logic/VisualMemory.js"></script>
-    <script src="../script.js"></script>
+        <div class="lg:col-span-5 grid grid-cols-2 gap-8">
+          <div>
+            <h3 class="text-white text-sm font-bold mb-6 uppercase tracking-widest">Benchmarks</h3>
+            <ul class="space-y-4 text-sm">
+              <li><a href="ReactionTime.html" class="text-gray-500 hover:text-blue-400 transition-colors">Reaction
+                  Time</a></li>
+              <li><a href="MindGrid.html" class="text-gray-500 hover:text-blue-400 transition-colors">Mind Grid</a></li>
+              <li><a href="TypingSpeed.html" class="text-gray-500 hover:text-blue-400 transition-colors">Typing
+                  Speed</a></li>
+              <li><a href="AimTrainer.html" class="text-gray-500 hover:text-blue-400 transition-colors">Aim Trainer</a>
+              </li>
+              <li><a href="VisualMemory.html" class="text-gray-500 hover:text-blue-400 transition-colors">Visual
+                  Memory</a></li>
+              <li><a href="NumberMemory.html" class="text-gray-500 hover:text-blue-400 transition-colors">Number
+                  Memory</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-white text-sm font-bold mb-6 uppercase tracking-widest">Platform</h3>
+            <ul class="space-y-4 text-sm">
+              <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Leaderboards</a></li>
+              <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Global Stats</a></li>
+              <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">API Access</a></li>
+              <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Privacy</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="lg:col-span-3">
+          <h3 class="text-white text-sm font-bold mb-6 uppercase tracking-widest">Report Issue</h3>
+          <div class="space-y-3">
+            <input type="text" placeholder="Describe bug..."
+              class="w-full bg-gray-900/50 border border-gray-800 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-blue-500 transition text-white placeholder:text-gray-600" />
+            <button
+              class="w-full bg-blue-600/10 border border-blue-600/20 text-blue-400 hover:bg-blue-600 hover:text-white py-3 rounded-lg text-xs font-black uppercase tracking-widest transition-all">
+              Submit Report
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-900 pt-10 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="text-gray-600 text-[11px] uppercase tracking-widest font-medium">
+          © 2026 Human Metrix // All Rights Reserved
+        </div>
+        <div class="flex items-center space-x-3">
+          <a href="#"
+            class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+            aria-label="Twitter / X">
+            <i class="fa-brands fa-x-twitter text-gray-500 group-hover:text-white text-sm"></i>
+          </a>
+          <a href="#"
+            class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+            aria-label="Discord">
+            <i class="fa-brands fa-discord text-gray-500 group-hover:text-white text-sm"></i>
+          </a>
+          <a href="#"
+            class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+            aria-label="GitHub">
+            <i class="fa-brands fa-github text-gray-500 group-hover:text-white text-sm"></i>
+          </a>
+          <a href="#"
+            class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+            aria-label="Instagram">
+            <i class="fa-brands fa-instagram text-gray-500 group-hover:text-white text-sm"></i>
+          </a>
+          <a href="#"
+            class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+            aria-label="Facebook">
+            <i class="fa-brands fa-facebook text-gray-500 group-hover:text-white text-sm"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════ SCRIPT ═══════════════════════════ -->
+  <script src="../Game Logic/VisualMemory.js"></script>
+  <script src="../script.js"></script>
 </body>
+
 </html>

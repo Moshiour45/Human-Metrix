@@ -1,182 +1,192 @@
-/* ═══════════════════════════════════════════════
-   Visual Memory – Game Logic
-   ═══════════════════════════════════════════════ */
+(() => {
+  'use strict';
 
-"use strict";
+  let level, lives, currentWord;
+  let seenWords, usedWords;
+  let isCurrentWordSeen = false;
 
-/* ── Word Pool ── */
-const WORD_POOL = [
-  "apple","bridge","cloud","dragon","eagle","forest","ghost","harbor",
-  "island","jungle","kernel","lantern","marble","needle","ocean","planet",
-  "quartz","rabbit","silver","timber","umbra","violet","walnut","xenon",
-  "yellow","zenith","anchor","blaze","cipher","dome","ember","flare",
-  "glyph","haze","ivory","jade","knoll","lunar","mist","nova",
-  "orbit","prism","quill","raven","shard","thorn","umber","vault",
-  "whisper","xray","yonder","zeal","abyss","beacon","cobalt","drift",
-  "eclipse","fjord","gravel","hollow","iris","jasper","kite","lava",
-  "marsh","neon","opal","pulse","quest","ridge","slate","tundra",
-  "uplift","venom","wrath","pixel","byte","cache","delta","echo",
-  "flux","grid","heap","index","jolt","kern","link","mesh",
-  "node","oxide","port","query","realm","stack","token","unit"
-];
+  const WORDS = [
+    // ── vowel swaps ──
+    "bat", "bet", "bit", "bot", "but",
+    "cap", "cop", "cup", "cep", "cip",
+    "man", "men", "min", "mon", "mun",
 
-/* ── State ── */
-let level        = 1;
-let score        = 0;
-let seenWords    = new Set();
-let usedIndices  = new Set();
-let currentWord  = "";
-let correctAnswer= "";   // "seen" | "new"
-let inputLocked  = false;
+    // ── double letters ──
+    "letter", "latter", "litter", "bitter", "butter",
+    "dinner", "winner", "sinner", "inner", "spinner",
 
-/* ── Helpers: DOM ── */
-const $ = id => document.getElementById(id);
+    // ── ending variations ──
+    "play", "plays", "played", "player", "playing",
+    "test", "tests", "tested", "tester", "testing",
 
-function showState(id) {
-  document.querySelectorAll(".state").forEach(el => el.classList.remove("active"));
-  $(id).classList.add("active");
-}
+    // ── prefix confusion ──
+    "react", "enact", "interact", "counteract", "detract",
+    "form", "reform", "inform", "transform", "uniform",
 
-/* ── Start ── */
-function startGame() {
-  level       = 1;
-  score       = 0;
-  seenWords   = new Set();
-  usedIndices = new Set();
-  inputLocked = false;
-  nextRound();
-}
+    // ── visually similar shapes ──
+    "clap", "clip", "slip", "flip", "flap",
+    "drip", "drop", "crop", "crap", "trap",
 
-/* ── Next Round ── */
-function nextRound() {
-  inputLocked = false;
-  updateLevelBadge();
-  showState("s-game");
+    // ── same structure different letters ──
+    "stone", "stony", "atone", "alone", "clone",
+    "plane", "plans", "plant", "plank", "blank",
 
-  const word = getWord();
-  currentWord   = word;
+    // ── tricky pairs ──
+    "angel", "angle", "anger", "ankle", "amble",
+    "brake", "break", "bleak", "black", "block",
 
-  // Determine correct answer BEFORE adding to seenWords for display
-  correctAnswer = seenWords.has(word) ? "seen" : "new";
+    // ── consonant swaps ──
+    "card", "cord", "core", "care", "cure",
+    "bold", "bald", "ball", "bell", "bill",
 
-  displayWord(word);
-}
+    // ── near duplicates ──
+    "mouse", "mouze", "house", "horse", "hoarse",
+    "light", "might", "night", "right", "sight",
 
-/* ── Get Word ── */
-function getWord() {
-  const canRepeat = seenWords.size > 0;
+    // ── fast confusion words ──
+    "quick", "quack", "click", "clock", "cloak",
+    "bring", "brink", "drink", "drank", "drunk",
 
-  if (canRepeat && Math.random() < 0.5) {
-    // Pick a random word from seenWords
-    const arr = Array.from(seenWords);
-    return arr[Math.floor(Math.random() * arr.length)];
-  } else {
-    // Pick a new word not seen before
-    const available = WORD_POOL.filter((_, i) => !usedIndices.has(i));
-    if (available.length === 0) {
-      // Pool exhausted: reset used (but keep seenWords)
-      usedIndices.clear();
-      return WORD_POOL[Math.floor(Math.random() * WORD_POOL.length)];
+    // ── extra fillers (still similar style) ──
+    "track", "trace", "truce", "truck", "trick",
+    "grind", "grand", "grant", "giant", "plant",
+    "flash", "slash", "smash", "stash", "crash",
+    "frame", "flame", "blame", "claim", "shame"
+  ];
+
+  /* DOM */
+  const sIdle = document.getElementById('s-idle');
+  const sGame = document.getElementById('s-game');
+  const sGameOver = document.getElementById('s-gameover');
+
+  const wordDisplay = document.getElementById('word-display');
+  const wordCard = document.getElementById('word-card');
+  const glow = document.getElementById('card-glow');
+
+  const levelLbl = document.getElementById('game-level-lbl');
+  const livesEl = document.getElementById('lives');
+
+  const goLevel = document.getElementById('go-level');
+  const goMissed = document.getElementById('go-missed');
+
+  const btnStart = document.getElementById('btn-start-idle');
+  const btnRestart = document.getElementById('btn-restart');
+  const btnSeen = document.getElementById('btn-seen');
+  const btnNew = document.getElementById('btn-new');
+
+  /* STATE SWITCH */
+  function switchState(show) {
+    [sIdle, sGame, sGameOver].forEach(s => s.classList.remove('active'));
+    show.classList.add('active');
+  }
+
+  function updateLives() {
+    livesEl.textContent = "❤️".repeat(lives);
+  }
+
+  /* ANIMATIONS */
+  function animateWord() {
+    wordDisplay.style.opacity = 0;
+    wordDisplay.style.transform = "scale(0.8) translateY(10px)";
+
+    setTimeout(() => {
+      wordDisplay.style.opacity = 1;
+      wordDisplay.style.transform = "scale(1) translateY(0)";
+    }, 80);
+  }
+
+  function glowEffect(color) {
+    glow.style.background = color;
+    glow.style.opacity = 1;
+    setTimeout(() => glow.style.opacity = 0, 200);
+  }
+
+  /* WORD LOGIC */
+  function getNewWord() {
+    let w;
+    do {
+      w = WORDS[Math.floor(Math.random() * WORDS.length)];
+    } while (usedWords.includes(w));
+    return w;
+  }
+
+  function nextWord() {
+    const showOld = Math.random() < 0.4 && seenWords.size > 0;
+
+    if (showOld) {
+      const arr = Array.from(seenWords);
+      currentWord = arr[Math.floor(Math.random() * arr.length)];
+      isCurrentWordSeen = true;
+    } else {
+      currentWord = getNewWord();
+      isCurrentWordSeen = false;
     }
-    const randomIndex = Math.floor(Math.random() * available.length);
-    const word = available[randomIndex];
-    usedIndices.add(WORD_POOL.indexOf(word));
-    return word;
+
+    wordDisplay.textContent = currentWord.toUpperCase();
+    levelLbl.textContent = "Level " + level;
+
+    animateWord();
   }
-}
 
-/* ── Display Word with animation ── */
-function displayWord(word) {
-  const el = $("word-display");
-  el.style.opacity = "0";
-  el.style.transform = "scale(0.88) translateY(10px)";
+  /* GAME */
+  function startGame() {
+    level = 1;
+    lives = 2;
+    seenWords = new Set();
+    usedWords = [];
 
-  setTimeout(() => {
-    el.textContent = word;
-    el.style.transition = "opacity 0.22s ease, transform 0.22s ease";
-    el.style.opacity = "1";
-    el.style.transform = "scale(1) translateY(0)";
-  }, 120);
-}
-
-/* ── Handle Answer ── */
-function handleAnswer(choice) {
-  if (inputLocked) return;
-  inputLocked = true;
-
-  const isCorrect = choice === correctAnswer;
-
-  // Add word to seen set regardless (it's been shown)
-  seenWords.add(currentWord);
-
-  if (isCorrect) {
-    score++;
-    showFeedback(true);
-  } else {
-    showFeedback(false);
+    updateLives();
+    switchState(sGame);
+    nextWord();
   }
-}
 
-/* ── Show Feedback ── */
-function showFeedback(isCorrect) {
-  showState("s-feedback");
+  function handleAnswer(type) {
 
-  $("fb-icon").textContent   = isCorrect ? "✓" : "✗";
-  $("fb-icon").style.color   = isCorrect ? "#34d399" : "#f87171";
-  $("fb-title").textContent  = isCorrect ? "Correct!" : "Incorrect!";
-  $("fb-title").style.color  = isCorrect ? "#34d399" : "#f87171";
-  $("fb-word").textContent   = currentWord;
-  $("fb-word").style.color   = isCorrect ? "#34d399" : "#f87171";
+    let correct =
+      (type === "seen" && isCurrentWordSeen) ||
+      (type === "new" && !isCurrentWordSeen);
 
-  $("fb-detail").textContent = isCorrect
-    ? `The word "${currentWord}" was ${correctAnswer === "seen" ? "already seen" : "brand new"}.`
-    : `The word "${currentWord}" was ${correctAnswer === "seen" ? "already seen" : "brand new"}.`;
+    if (correct) {
+      glowEffect("rgba(34,197,94,0.3)");
+    } else {
+      glowEffect("rgba(239,68,68,0.3)");
+      lives--;
+      updateLives();
 
-  if (isCorrect) {
+      if (lives <= 0) {
+        endGame();
+        return;
+      }
+    }
+
+    // AFTER answering → mark word as seen
+    if (!isCurrentWordSeen) {
+      seenWords.add(currentWord);
+      usedWords.push(currentWord);
+    }
+
     level++;
-    const btn = $("btn-next");
-    btn.textContent = "Next Round";
-    btn.className   = "btn-next btn-continue";
-    btn.onclick     = nextRound;
-  } else {
-    const btn = $("btn-next");
-    btn.textContent = "See Results";
-    btn.className   = "btn-next btn-retry";
-    btn.onclick     = showGameOver;
+    setTimeout(nextWord, 250);
   }
-}
 
-/* ── Game Over ── */
-function showGameOver() {
-  showState("s-gameover");
-  $("go-level").textContent  = level;
-  $("go-score").textContent  = score;
-  const total = score + 1; // +1 for the wrong answer
-  const pct   = total > 0 ? Math.round((score / total) * 100) : 0;
-  $("go-accuracy").textContent = pct + "%";
-  $("go-missed").textContent   = currentWord;
-}
-
-/* ── UI helpers ── */
-function updateLevelBadge() {
-  $("game-level-lbl").textContent = "Level " + level;
-}
-
-/* ── Keyboard support ── */
-document.addEventListener("keydown", e => {
-  if ($("s-game").classList.contains("active")) {
-    if (e.key === "s" || e.key === "S") handleAnswer("seen");
-    if (e.key === "n" || e.key === "N") handleAnswer("new");
+  function endGame() {
+    goLevel.textContent = level;
+    goMissed.textContent = currentWord.toUpperCase();
+    switchState(sGameOver);
   }
-  if (e.key === "Enter") {
-    if ($("s-idle").classList.contains("active"))     { startGame(); }
-    else if ($("s-feedback").classList.contains("active")) { $("btn-next").click(); }
-    else if ($("s-gameover").classList.contains("active")) { startGame(); }
-  }
-});
 
-/* ── Wire up idle button ── */
-document.addEventListener("DOMContentLoaded", () => {
-  $("btn-start-idle").addEventListener("click", startGame);
-  $("btn-restart").addEventListener("click", startGame);
-});
+  /* EVENTS */
+  btnStart.onclick = startGame;
+  btnRestart.onclick = startGame;
+
+  btnSeen.onclick = () => handleAnswer("seen");
+  btnNew.onclick = () => handleAnswer("new");
+
+  document.addEventListener("keydown", (e) => {
+    if (!sGame.classList.contains("active")) return;
+
+    if (e.key.toLowerCase() === "s") handleAnswer("seen");
+    if (e.key.toLowerCase() === "n") handleAnswer("new");
+  });
+
+})();
