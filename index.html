@@ -82,16 +82,20 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
+
+        a.game-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
     </style>
 </head>
 
 <body class="bg-gray-950 text-gray-300 flex flex-col min-h-screen font-sans selection:bg-blue-500/30">
 
-    <!-- NavBar -->
     <header class="bg-gray-900/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
         <div class="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-4">
 
-            <!-- Logo -->
             <div class="flex items-center shrink-0">
                 <a href="index.html" class="flex items-center group">
                     <img src="Images/logo.png" alt="Human Metrix Logo"
@@ -103,26 +107,21 @@
                 </a>
             </div>
 
-            <!-- Desktop Nav -->
             <nav id="desktop-nav" class="items-center gap-x-5 text-sm font-medium">
-                <a href="Games/ReactionTime.html" class="hover:text-blue-400 transition whitespace-nowrap">Reaction
-                    Time</a>
+                <a href="Games/ReactionTime.html" class="hover:text-blue-400 transition whitespace-nowrap">Reaction Time</a>
                 <a href="Games/MindGrid.html" class="hover:text-blue-400 transition whitespace-nowrap">Mind Grid</a>
                 <a href="Games/TypingSpeed.html" class="hover:text-blue-400 transition whitespace-nowrap">Typing Speed</a>
-                <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Aim Trainer</a>
-                <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Visual Memory</a>
-                <a href="#" class="hover:text-blue-400 transition whitespace-nowrap">Number Memory</a>
-                <a href="#" class="hidden hover:text-blue-400 transition whitespace-nowrap">Leaderboard</a>
+                <a href="Games/AimTrainer.html" class="hover:text-blue-400 transition whitespace-nowrap">Aim Trainer</a>
+                <a href="Games/VisualMemory.html" class="hover:text-blue-400 transition whitespace-nowrap">Visual Memory</a>
+                <a href="Games/NumberMemory.html" class="hover:text-blue-400 transition whitespace-nowrap">Number Memory</a>
             </nav>
 
-            <!-- Right side: CTA + hamburger -->
             <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-                <button id="start-btn-desktop"
+                <a href="Games/ReactionTime.html" id="start-btn-desktop"
                     class="bg-blue-600 hover:bg-blue-500 text-white px-4 sm:px-5 py-2 rounded-full text-sm font-semibold transition shadow-lg shadow-blue-900/20 whitespace-nowrap">
                     Start Test
-                </button>
+                </a>
 
-                <!-- Hamburger -->
                 <button id="menu-toggle"
                     class="flex flex-col justify-center items-center gap-[5px] w-9 h-9 p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none transition-colors">
                     <span class="bar"></span>
@@ -132,11 +131,10 @@
             </div>
         </div>
 
-        <!-- Mobile / Tablet Dropdown Menu -->
         <div id="mobile-menu" class="bg-gray-900/95 backdrop-blur-md border-b border-gray-800">
             <div class="container mx-auto px-4 sm:px-6 py-5">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 mb-5">
-                    <a href="./Games/ReactionTime.html"
+                    <a href="Games/ReactionTime.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-bolt-lightning w-5 text-blue-400"></i> Reaction Time
                     </a>
@@ -148,37 +146,31 @@
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-regular fa-keyboard w-5 text-blue-400"></i> Typing Speed
                     </a>
-                    <a href="#"
+                    <a href="Games/AimTrainer.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-crosshairs w-5 text-blue-400"></i> Aim Trainer
                     </a>
-                    <a href="#"
+                    <a href="Games/VisualMemory.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-eye w-5 text-blue-400"></i> Visual Memory
                     </a>
-                    <a href="#"
+                    <a href="Games/NumberMemory.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-hashtag w-5 text-blue-400"></i> Number Memory
                     </a>
-                    <a href="#"
-                        class=" hidden flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium sm:col-span-2">
-                        <i class="fa-solid fa-trophy w-5 text-blue-400"></i> Leaderboard
-                    </a>
                 </div>
                 <div class="border-t border-gray-800 pt-4">
-                    <button
-                        class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white px-8 py-2.5 rounded-xl font-bold text-sm transition">
+                    <a href="Games/ReactionTime.html"
+                        class="inline-block w-full sm:w-auto text-center bg-blue-600 hover:bg-blue-500 text-white px-8 py-2.5 rounded-xl font-bold text-sm transition">
                         Start Test
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="flex-grow">
 
-        <!-- Hero Section -->
         <section class="flex items-center justify-center px-6 pt-20 pb-10">
             <div class="max-w-4xl w-full text-center">
                 <h1 class="text-5xl sm:text-6xl lg:text-8xl font-black text-white mb-8 tracking-tighter leading-none">
@@ -191,19 +183,17 @@
                     Measure reaction time, memory, and focus through professional-grade interactive games.
                 </p>
                 <div class="mt-10">
-                    <button
-                        class="bg-white text-gray-950 px-8 py-4 rounded-full font-bold hover:bg-blue-500 hover:text-white transition-all duration-300 shadow-2xl shadow-white/5">
+                    <a href="#tests"
+                        class="inline-block bg-white text-gray-950 px-8 py-4 rounded-full font-bold hover:bg-blue-500 hover:text-white transition-all duration-300 shadow-2xl shadow-white/5">
                         Explore Tests
-                    </button>
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- Test Cards Section -->
-        <section class="px-6 pb-24 pt-4">
+        <section id="tests" class="px-6 pb-24 pt-4">
             <div class="max-w-6xl mx-auto">
 
-                <!-- Section Heading -->
                 <div class="text-center mb-14">
                     <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
                         Choose Your
@@ -214,12 +204,9 @@
                     <p class="text-gray-400 text-lg">Six scientifically-designed tests to benchmark your mind.</p>
                 </div>
 
-                <!-- Cards Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
 
-                    <!-- Reaction Time -->
-                    <div
-                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
+                    <a href="Games/ReactionTime.html" class="game-card group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
                         <div
                             class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
                         </div>
@@ -232,11 +219,9 @@
                             Start Test
                             <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
                         </span>
-                    </div>
+                    </a>
 
-                    <!-- Mind Grid -->
-                    <div
-                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
+                    <a href="Games/MindGrid.html" class="game-card group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
                         <div
                             class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
                         </div>
@@ -249,11 +234,9 @@
                             Start Test
                             <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
                         </span>
-                    </div>
+                    </a>
 
-                    <!-- Typing Speed -->
-                    <div
-                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
+                    <a href="Games/TypingSpeed.html" class="game-card group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
                         <div
                             class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
                         </div>
@@ -266,11 +249,9 @@
                             Start Test
                             <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
                         </span>
-                    </div>
+                    </a>
 
-                    <!-- Aim Trainer -->
-                    <div
-                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
+                    <a href="Games/AimTrainer.html" class="game-card group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
                         <div
                             class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
                         </div>
@@ -283,11 +264,9 @@
                             Start Test
                             <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
                         </span>
-                    </div>
+                    </a>
 
-                    <!-- Visual Memory -->
-                    <div
-                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
+                    <a href="Games/VisualMemory.html" class="game-card group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
                         <div
                             class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
                         </div>
@@ -300,11 +279,9 @@
                             Start Test
                             <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
                         </span>
-                    </div>
+                    </a>
 
-                    <!-- Number Memory -->
-                    <div
-                        class="group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
+                    <a href="Games/NumberMemory.html" class="game-card group relative bg-white/5 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:border-blue-400/60 hover:shadow-xl hover:shadow-blue-500/10">
                         <div
                             class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent rounded-t-2xl">
                         </div>
@@ -317,7 +294,7 @@
                             Start Test
                             <span class="transform group-hover:translate-x-1 transition-transform duration-200">→</span>
                         </span>
-                    </div>
+                    </a>
 
                 </div>
             </div>
@@ -325,7 +302,6 @@
 
     </main>
 
-    <!-- Footer -->
     <footer class="bg-gray-950 border-t border-gray-900 pt-20 pb-10">
         <div class="container mx-auto px-6">
 
@@ -334,8 +310,7 @@
                 <div class="lg:col-span-4 space-y-6">
                     <div class="flex items-center space-x-2">
                         <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                        <span class="text-white font-bold tracking-widest uppercase text-xs">System Status:
-                            Online</span>
+                        <span class="text-white font-bold tracking-widest uppercase text-xs">System Status: Online</span>
                     </div>
                     <h2 class="text-2xl font-bold text-white">Human Metrix</h2>
                     <p class="text-gray-500 text-sm leading-relaxed max-w-xs">
@@ -348,28 +323,20 @@
                     <div>
                         <h3 class="text-white text-sm font-bold mb-6 uppercase tracking-widest">Benchmarks</h3>
                         <ul class="space-y-4 text-sm">
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Reaction
-                                    Time</a></li>
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Mind Grid</a>
-                            </li>
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Typing Speed</a>
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Aim Trainer</a>
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Visual
-                                    Memory</a></li>
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Number
-                                    Memory</a></li>
-                            </li>
+                            <li><a href="Games/ReactionTime.html" class="text-gray-500 hover:text-blue-400 transition-colors">Reaction Time</a></li>
+                            <li><a href="Games/MindGrid.html" class="text-gray-500 hover:text-blue-400 transition-colors">Mind Grid</a></li>
+                            <li><a href="Games/TypingSpeed.html" class="text-gray-500 hover:text-blue-400 transition-colors">Typing Speed</a></li>
+                            <li><a href="Games/AimTrainer.html" class="text-gray-500 hover:text-blue-400 transition-colors">Aim Trainer</a></li>
+                            <li><a href="Games/VisualMemory.html" class="text-gray-500 hover:text-blue-400 transition-colors">Visual Memory</a></li>
+                            <li><a href="Games/NumberMemory.html" class="text-gray-500 hover:text-blue-400 transition-colors">Number Memory</a></li>
                         </ul>
                     </div>
                     <div>
                         <h3 class="text-white text-sm font-bold mb-6 uppercase tracking-widest">Platform</h3>
                         <ul class="space-y-4 text-sm">
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Leaderboards</a>
-                            </li>
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Global Stats</a>
-                            </li>
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">API Access</a>
-                            </li>
+                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Leaderboards</a></li>
+                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Global Stats</a></li>
+                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">API Access</a></li>
                             <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Privacy</a></li>
                         </ul>
                     </div>
@@ -393,29 +360,19 @@
                     © 2026 Human Metrix // All Rights Reserved
                 </div>
                 <div class="flex items-center space-x-3">
-                    <a href="#"
-                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
-                        aria-label="Twitter / X">
+                    <a href="#" class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group" aria-label="Twitter / X">
                         <i class="fa-brands fa-x-twitter text-gray-500 group-hover:text-white text-sm"></i>
                     </a>
-                    <a href="#"
-                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
-                        aria-label="Discord">
+                    <a href="#" class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group" aria-label="Discord">
                         <i class="fa-brands fa-discord text-gray-500 group-hover:text-white text-sm"></i>
                     </a>
-                    <a href="#"
-                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
-                        aria-label="GitHub">
+                    <a href="#" class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group" aria-label="GitHub">
                         <i class="fa-brands fa-github text-gray-500 group-hover:text-white text-sm"></i>
                     </a>
-                    <a href="#"
-                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
-                        aria-label="Instagram">
+                    <a href="#" class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group" aria-label="Instagram">
                         <i class="fa-brands fa-instagram text-gray-500 group-hover:text-white text-sm"></i>
                     </a>
-                    <a href="#"
-                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
-                        aria-label="Facebook">
+                    <a href="#" class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group" aria-label="Facebook">
                         <i class="fa-brands fa-facebook text-gray-500 group-hover:text-white text-sm"></i>
                     </a>
                 </div>

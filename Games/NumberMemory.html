@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Human Metrix - Reaction Time</title>
+    <title>Number Memory – Human Metrix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="../dist/style.css">
     <style>
+        /* ── hamburger ── */
         #mobile-menu {
             max-height: 0;
             overflow: hidden;
@@ -73,6 +74,92 @@
             }
         }
 
+        /* ── game states ── */
+        .state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .state.active {
+            display: flex;
+        }
+
+        /* ── badge ── */
+        .level-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: #60a5fa;
+            background: rgba(59, 130, 246, .1);
+            border: 1px solid rgba(59, 130, 246, .25);
+            border-radius: 999px;
+            padding: 5px 18px;
+        }
+
+        /* ── ring timer ── */
+        #ring-prog {
+            transition: stroke-dashoffset .08s linear;
+        }
+
+        /* ── input ── */
+        #inp-num {
+            background: rgba(255, 255, 255, .05);
+            border: 1.5px solid rgba(59, 130, 246, .3);
+            color: #fff;
+            font-size: clamp(1.8rem, 7vw, 2.8rem);
+            font-weight: 800;
+            letter-spacing: .12em;
+            text-align: center;
+            width: 100%;
+            max-width: 360px;
+            padding: 18px 20px;
+            border-radius: 16px;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        #inp-num:focus {
+            border-color: #3b82f6;
+        }
+
+        #inp-num::placeholder {
+            color: #374151;
+        }
+
+        /* ── feedback btn variants ── */
+        .btn-continue {
+            background: #34d399 !important;
+            color: #030712 !important;
+            border: none !important;
+        }
+
+        .btn-continue:hover {
+            background: #10b981 !important;
+        }
+
+        .btn-retry {
+            background: rgba(248, 113, 113, .1) !important;
+            color: #f87171 !important;
+            border: 1px solid rgba(248, 113, 113, .3) !important;
+        }
+
+        .btn-retry:hover {
+            background: rgba(248, 113, 113, .2) !important;
+        }
+
+        /* ── number colours ── */
+        .correct-flash {
+            color: #34d399;
+        }
+
+        .wrong-flash {
+            color: #f87171;
+        }
+
+        /* ── card icon (footer/nav reuse) ── */
         .card-icon {
             display: inline-block;
             font-size: 2.25rem;
@@ -87,7 +174,10 @@
 
 <body class="bg-gray-950 text-gray-300 flex flex-col min-h-screen font-sans selection:bg-blue-500/30">
 
-    <!-- NavBar -->
+
+
+
+    <!-- ═══════════════════════════ NAVBAR ═══════════════════════════ -->
     <header class="bg-gray-900/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
         <div class="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-4">
 
@@ -104,10 +194,9 @@
             </div>
 
             <!-- Desktop Nav -->
-            <nav id="desktop-nav" class="items-center gap-x-5 text-sm font-medium">
+            <nav id="desktop-nav" class="items-center gap-x-5 text-sm font-medium text-gray-300">
                 <a href="../index.html" class="hover:text-blue-400 transition whitespace-nowrap">Home</a>
-                <a href="ReactionTime.html" class="text-blue-400 transition whitespace-nowrap">Reaction
-                    Time</a>
+                <a href="ReactionTime.html" class="hover:text-blue-400 transition whitespace-nowrap">Reaction Time</a>
                 <a href="MindGrid.html" class="hover:text-blue-400 transition whitespace-nowrap">Mind Grid</a>
                 <a href="TypingSpeed.html" class="hover:text-blue-400 transition whitespace-nowrap">Typing Speed</a>
                 <a href="AimTrainer.html" class="hover:text-blue-400 transition whitespace-nowrap">Aim Trainer</a>
@@ -115,14 +204,14 @@
                 <a href="NumberMemory.html" class="hover:text-blue-400 transition whitespace-nowrap">Number Memory</a>
             </nav>
 
-            <!-- Right side: CTA + hamburger -->
+            <!-- Right: CTA + hamburger -->
             <div class="flex items-center gap-2 sm:gap-3 shrink-0">
                 <button id="start-btn-desktop"
-                    class="bg-blue-600 hover:bg-blue-500 text-white px-4 sm:px-5 py-2 rounded-full text-sm font-semibold transition shadow-lg shadow-blue-900/20 whitespace-nowrap">
+                    class="bg-blue-600 hover:bg-blue-500 text-white px-4 sm:px-5 py-2 rounded-full text-sm font-semibold transition shadow-lg shadow-blue-900/20 whitespace-nowrap"
+                    onclick="startGame()">
                     Start Test
                 </button>
 
-                <!-- Hamburger -->
                 <button id="menu-toggle"
                     class="flex flex-col justify-center items-center gap-[5px] w-9 h-9 p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none transition-colors">
                     <span class="bar"></span>
@@ -132,149 +221,175 @@
             </div>
         </div>
 
-        <!-- Mobile / Tablet Dropdown Menu -->
+        <!-- Mobile dropdown -->
         <div id="mobile-menu" class="bg-gray-900/95 backdrop-blur-md border-b border-gray-800">
             <div class="container mx-auto px-4 sm:px-6 py-5">
+
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 mb-5">
+
+                    <!-- Home -->
                     <a href="../index.html"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium sm:col-span-2">
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-house w-5 text-blue-400"></i> Home
                     </a>
+
+                    <!-- Other links -->
                     <a href="ReactionTime.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-bolt-lightning w-5 text-blue-400"></i> Reaction Time
                     </a>
+
                     <a href="MindGrid.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-brain w-5 text-blue-400"></i> Mind Grid
                     </a>
+
                     <a href="TypingSpeed.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-regular fa-keyboard w-5 text-blue-400"></i> Typing Speed
                     </a>
+
                     <a href="AimTrainer.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-crosshairs w-5 text-blue-400"></i> Aim Trainer
                     </a>
+
                     <a href="VisualMemory.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-eye w-5 text-blue-400"></i> Visual Memory
                     </a>
-                    <a href="#"
+
+                    <a href="NumberMemory.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-hashtag w-5 text-blue-400"></i> Number Memory
                     </a>
+
                 </div>
+
+                <!-- Mobile CTA -->
                 <div class="border-t border-gray-800 pt-4">
-                    <button
+                    <button onclick="startGame()"
                         class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white px-8 py-2.5 rounded-xl font-bold text-sm transition">
                         Start Test
                     </button>
                 </div>
+
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="flex-grow">
-        <section class="flex flex-col items-center px-4 sm:px-6 pt-6 sm:pt-8 pb-12 sm:pb-16">
-            <div class="w-full max-w-2xl mx-auto">
+    <!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
+    <main class="flex-grow flex items-center justify-center px-4 py-16 min-h-[70vh]">
+        <div id="game-wrap" class="w-full max-w-xl text-center">
 
-                <!-- Heading -->
-                <div class="flex flex-col items-center text-center mb-6 sm:mb-10 gap-3">
-                    <div>
-                        <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight mb-2">
-                            Reaction <span
-                                class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Time</span>
-                        </h1>
-                        <p class="text-sm sm:text-base text-gray-500 font-medium tracking-wide">
-                            When the box turns <span
-                                class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700 font-semibold">Blue</span>,
-                            Click.
-                        </p>
-                    </div>
-                </div>
-                <!-- Stats Row (above the box) -->
-                <div class="flex items-center justify-between gap-3 mb-4 sm:mb-5">
-
-                    <!-- Stats -->
-                    <div class="flex items-center gap-4 sm:gap-6 lg:gap-10">
-                        <div>
-                            <p
-                                class="text-xs sm:text-xl font-bold uppercase tracking-widest text-gray-600 mb-0.5 sm:mb-1">
-                                Last</p>
-                            <p id="stat-last" class="text-base sm:text-xl font-black text-white">--</p>
-                        </div>
-                        <div class="w-px h-7 sm:h-8 bg-gray-800"></div>
-                        <div>
-                            <p
-                                class="text-xs sm:text-xl font-bold uppercase tracking-widest text-gray-600 mb-0.5 sm:mb-1">
-                                Best</p>
-                            <p id="stat-best"
-                                class="text-base sm:text-xl font-black text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-600">
-                                --</p>
-                        </div>
-                        <div class="w-px h-7 sm:h-8 bg-gray-800"></div>
-                        <div>
-                            <p
-                                class="text-xs sm:text-xl font-bold uppercase tracking-widest text-gray-600 mb-0.5 sm:mb-1">
-                                Tries</p>
-                            <p id="stat-tries" class="text-base sm:text-xl font-black text-white">0</p>
-                        </div>
-                    </div>
-
-                    <!-- Try Again Button -->
-                    <button id="try-again-btn"
-                        class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-2.5 rounded-xl border border-gray-700 bg-gray-900 text-white text-xs sm:text-sm font-bold whitespace-nowrap hover:border-blue-500 hover:bg-blue-950 hover:text-blue-400 transition-all duration-200 cursor-pointer shrink-0">
-                        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-                        </svg>
-                        Try Again
-                    </button>
-
-                </div>
-
-                <!-- Game Box (Clickable) -->
-                <button id="game-box"
-                    class="w-full rounded-2xl border border-gray-800 bg-gradient-to-b from-gray-900 to-gray-950 p-2 sm:p-3 shadow-2xl cursor-pointer hover:border-gray-700 transition-all duration-200 text-left">
-                    <div class="rounded-xl bg-gray-950 border border-gray-800 flex flex-col items-center justify-center px-4 sm:px-6"
-                        style="height: clamp(260px, 45vh, 520px);">
-
-                        <!-- Idle State -->
-                        <div id="idle-state" class="flex flex-col items-center text-center">
-                            <p class="text-gray-500 text-xl sm:text-xl lg:text-2xl font-medium tracking-wide">
-                                Click anywhere to start the game
-                            </p>
-                        </div>
-
-                        <!-- Result State (hidden by default) -->
-                        <div id="result-state" class="hidden flex-col items-center text-center">
-                            <p id="reaction-number"
-                                class="text-7xl sm:text-8xl lg:text-9xl font-black text-white tabular-nums tracking-tighter leading-none mb-2 sm:mb-3">
-                                413
-                            </p>
-                            <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-4 sm:mb-6">
-                                Milliseconds
-                            </p>
-                            <span id="perf-badge"
-                                class="px-4 sm:px-5 py-1 sm:py-1.5 rounded-full text-xs font-black uppercase tracking-widest border border-red-900 bg-red-950 text-red-400">
-                                Slow
-                            </span>
-                        </div>
-
-                    </div>
+            <!-- ── IDLE ── -->
+            <div id="s-idle" class="state active gap-6">
+                <span class="level-badge">Number Memory</span>
+                <h1
+                    style="font-size: clamp(2.4rem, 8vw, 4.5rem); font-weight: 900; color: #fff; letter-spacing: -.03em; line-height: 1.05;">
+                    How many digits<br>can you recall?
+                </h1>
+                <p style="color:#6b7280; font-size:1.05rem; max-width:320px; line-height:1.65;">
+                    A number flashes on screen. Memorize it, then type it back. Each level adds one more digit.
+                </p>
+                <div style="width:40px; height:1px; background:rgba(255,255,255,.08);"></div>
+                <button id="btn-start"
+                    style="background:#fff; color:#030712; padding:14px 36px; border-radius:999px; font-weight:700; font-size:.95rem; border:none; cursor:pointer; transition:background .2s, color .2s;"
+                    onmouseover="this.style.background='#3b82f6';this.style.color='#fff'"
+                    onmouseout="this.style.background='#fff';this.style.color='#030712'">
+                    Start Test
                 </button>
-
             </div>
-        </section>
+
+            <!-- ── MEMORIZE ── -->
+            <div id="s-memorize" class="state gap-5">
+
+                <span class="level-badge" id="mem-level-lbl">Level 1</span>
+
+                <p class="text-xs tracking-widest uppercase text-gray-500">
+                    Memorize this number
+                </p>
+
+                <div class="flex flex-col items-center gap-6">
+
+                    <!-- TIMER -->
+                    <div class="relative w-[140px] h-[140px] flex items-center justify-center">
+                        <svg viewBox="0 0 200 200" class="absolute inset-0 w-full h-full -rotate-90">
+
+                            <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.05)"
+                                stroke-width="8" />
+
+                            <circle id="ring-prog" cx="100" cy="100" r="90" fill="none" stroke="#3b82f6"
+                                stroke-width="8" stroke-linecap="round" />
+                        </svg>
+                    </div>
+
+                    <!-- NUMBER -->
+                    <div class="w-full max-w-[420px] px-6 py-10 rounded-2xl bg-white/5 border border-white/10">
+                        <div id="display-num" class="text-white text-center font-black tracking-widest text-4xl">
+                            —
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- ── RECALL ── -->
+            <div id="s-recall" class="state gap-6">
+                <span class="level-badge" id="rec-level-lbl">Level 1</span>
+                <p style="font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:#6b7280;">What was the
+                    number?</p>
+                <input id="inp-num" type="tel" placeholder="Type here…" autocomplete="off" spellcheck="false" />
+                <button id="btn-submit"
+                    style="background:#3b82f6; color:#fff; padding:13px 40px; border-radius:999px; font-weight:700; font-size:.95rem; border:none; cursor:pointer; transition:background .2s;"
+                    onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">
+                    Submit
+                </button>
+            </div>
+
+            <!-- ── FEEDBACK ── -->
+            <div id="s-feedback" class="state gap-5">
+                <div id="feedback-icon" style="font-size:3.5rem; line-height:1;"></div>
+                <div id="feedback-title" style="font-size:1.6rem; font-weight:900; color:#fff;"></div>
+                <div id="feedback-detail" style="font-size:.9rem; color:#9ca3af;"></div>
+                <div id="feedback-correct"
+                    style="font-size:clamp(2rem,8vw,3.5rem); font-weight:900; letter-spacing:.1em;"></div>
+                <button id="btn-next"
+                    style="margin-top:8px; padding:13px 40px; border-radius:999px; font-weight:700; font-size:.95rem; cursor:pointer; transition:background .2s;">
+                </button>
+            </div>
+
+            <!-- ── GAME OVER ── -->
+            <div id="s-gameover" class="state gap-6">
+                <span class="level-badge">Test Complete</span>
+                <h2
+                    style="font-size:clamp(2.2rem,8vw,3.8rem); font-weight:900; color:#fff; letter-spacing:-.03em; line-height:1.05;">
+                    You reached<br>Level <span id="go-level">—</span>
+                </h2>
+                <div
+                    style="background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:1.5rem 3rem; width:100%; max-width:300px;">
+                    <p
+                        style="font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:#6b7280; margin-bottom:8px;">
+                        Digits remembered</p>
+                    <p id="go-digits" style="font-size:4rem; font-weight:900; color:#fff;">—</p>
+                </div>
+                <p style="font-size:.875rem; color:#6b7280;">
+                    You missed: <span id="go-missed"
+                        style="color:#f87171; font-weight:700; font-size:1.1rem; letter-spacing:.08em;"></span>
+                </p>
+                <button id="btn-restart"
+                    style="background:#fff; color:#030712; padding:14px 36px; border-radius:999px; font-weight:700; font-size:.95rem; border:none; cursor:pointer; transition:background .2s, color .2s;"
+                    onmouseover="this.style.background='#3b82f6';this.style.color='#fff'"
+                    onmouseout="this.style.background='#fff';this.style.color='#030712'">
+                    Try Again
+                </button>
+            </div>
+
+        </div>
     </main>
 
-    <!-- Footer -->
+    <!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
     <footer class="bg-gray-950 border-t border-gray-900 pt-20 pb-10">
         <div class="container mx-auto px-6">
-
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-16">
 
                 <div class="lg:col-span-4 space-y-6">
@@ -295,18 +410,16 @@
                         <h3 class="text-white text-sm font-bold mb-6 uppercase tracking-widest">Benchmarks</h3>
                         <ul class="space-y-4 text-sm">
                             <li><a href="ReactionTime.html"
-                                    class="text-gray-500 hover:text-blue-400 transition-colors">Reaction
-                                    Time</a></li>
+                                    class="text-gray-500 hover:text-blue-400 transition-colors">Reaction Time</a></li>
                             <li><a href="MindGrid.html" class="text-gray-500 hover:text-blue-400 transition-colors">Mind
-                                    Grid</a>
-                            </li>
-                            <li><a href="TypingSpeed.html" class="text-gray-500 hover:text-blue-400 transition-colors">Typing Speed</a>
+                                    Grid</a></li>
+                            <li><a href="TypingSpeed.html"
+                                    class="text-gray-500 hover:text-blue-400 transition-colors">Typing Speed</a></li>
                             <li><a href="AimTrainer.html" class="text-gray-500 hover:text-blue-400 transition-colors">Aim Trainer</a>
+                            </li>
                             <li><a href="VisualMemory.html" class="text-gray-500 hover:text-blue-400 transition-colors">Visual
                                     Memory</a></li>
-                            <li><a href="NumberMemory.html" class="text-gray-500 hover:text-blue-400 transition-colors">Number
-                                    Memory</a></li>
-                            </li>
+                            <li><a href="NumberMemory.html" class=text-gray-500 hover:text-blue-400 transition-colors">Number Memory</a></li>
                         </ul>
                     </div>
                     <div>
@@ -370,9 +483,10 @@
             </div>
         </div>
     </footer>
-    <script src="../script.js"></script>
-    <script src="../Game Logic/ReactionTime.js"></script>
 
+    <!-- ═══════════════════════════ SCRIPT ═══════════════════════════ -->
+    <script src="../Game Logic/NumberMemory.js"></script>
+    <script src="../script.js"></script>
 </body>
 
 </html>
