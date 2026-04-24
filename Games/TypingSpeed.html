@@ -10,7 +10,6 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="../dist/style.css">
     <style>
-
         #mobile-menu {
             max-height: 0;
             overflow: hidden;
@@ -103,10 +102,19 @@
             border-bottom: 2px solid #ef4444;
         }
 
-        .ts-letter         { color: #9ca3af; }
-        .ts-letter.correct { color: #60a5fa; }
-        .ts-letter.wrong   { color: #ef4444; }
-        .ts-letter.extra   {
+        .ts-letter {
+            color: #9ca3af;
+        }
+
+        .ts-letter.correct {
+            color: #60a5fa;
+        }
+
+        .ts-letter.wrong {
+            color: #ef4444;
+        }
+
+        .ts-letter.extra {
             color: #dc2626;
             text-decoration: underline;
             text-underline-offset: 3px;
@@ -137,8 +145,15 @@
         }
 
         @keyframes ts-blink {
-            0%, 100% { opacity: 1; }
-            50%      { opacity: 0; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
         }
 
         .timer-danger {
@@ -148,11 +163,18 @@
         }
 
         @keyframes ts-pulse {
-            from { opacity: 1; }
-            to   { opacity: 0.4; }
+            from {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0.4;
+            }
         }
 
-        .ts-word.committed { opacity: 0.55; }
+        .ts-word.committed {
+            opacity: 0.55;
+        }
 
         #hidden-input {
             position: absolute;
@@ -169,13 +191,27 @@
 
         /* ── No-keyboard panel animations ── */
         @keyframes kb-float {
-            0%, 100% { transform: translateY(0px);  }
-            50%      { transform: translateY(-7px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-7px);
+            }
         }
 
         @keyframes kb-glow {
-            0%, 100% { box-shadow: 0 0 0   0   rgba(59,130,246,0);    }
-            50%      { box-shadow: 0 0 28px 6px rgba(59,130,246,0.15); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+            }
+
+            50% {
+                box-shadow: 0 0 28px 6px rgba(59, 130, 246, 0.15);
+            }
         }
 
         #no-kb-icon-wrap {
@@ -198,18 +234,19 @@
                     <img src="../Images/logo.png" alt="Human Metrix Logo"
                         class="h-8 md:h-10 w-auto transition-all duration-300 group-hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]">
                     <h1 class="ml-2 md:ml-3 text-base md:text-xl font-bold text-white tracking-tight whitespace-nowrap">
-                        Human <span class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Metrix</span>
+                        Human <span
+                            class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Metrix</span>
                     </h1>
                 </a>
             </div>
             <nav id="desktop-nav" class="items-center gap-x-5 text-sm font-medium">
-                <a href="../index.html"        class="hover:text-blue-400 transition whitespace-nowrap">Home</a>
-                <a href="ReactionTime.html"    class="hover:text-blue-400 transition whitespace-nowrap">Reaction Time</a>
-                <a href="MindGrid.html"        class="hover:text-blue-400 transition whitespace-nowrap">Mind Grid</a>
-                <a href="TypingSpeed.html"     class="hover:text-blue-400 transition whitespace-nowrap">Typing Speed</a>
-                <a href="#"                    class="hover:text-blue-400 transition whitespace-nowrap">Aim Trainer</a>
-                <a href="#"                    class="hover:text-blue-400 transition whitespace-nowrap">Visual Memory</a>
-                <a href="#"                    class="hover:text-blue-400 transition whitespace-nowrap">Number Memory</a>
+                <a href="../index.html" class="hover:text-blue-400 transition whitespace-nowrap">Home</a>
+                <a href="ReactionTime.html" class="hover:text-blue-400 transition whitespace-nowrap">Reaction Time</a>
+                <a href="MindGrid.html" class="hover:text-blue-400 transition whitespace-nowrap">Mind Grid</a>
+                <a href="TypingSpeed.html" class="hover:text-blue-400 transition whitespace-nowrap">Typing Speed</a>
+                <a href="AimTrainer.html" class="hover:text-blue-400 transition whitespace-nowrap">Aim Trainer</a>
+                <a href="VisualMemory.html" class="hover:text-blue-400 transition whitespace-nowrap">Visual Memory</a>
+                <a href="NumberMemory.html" class="hover:text-blue-400 transition whitespace-nowrap">Number Memory</a>
             </nav>
             <div class="flex items-center gap-2 sm:gap-3 shrink-0">
                 <button id="start-btn-desktop"
@@ -237,18 +274,19 @@
                     <a href="TypingSpeed.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-regular fa-keyboard w-5 text-blue-400"></i> Typing Speed</a>
-                    <a href="#"
+                    <a href="AimTrainer.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-crosshairs w-5 text-blue-400"></i> Aim Trainer</a>
-                    <a href="#"
+                    <a href="VisualMemory.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-eye w-5 text-blue-400"></i> Visual Memory</a>
-                    <a href="#"
+                    <a href="NumberMemory.html"
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
                         <i class="fa-solid fa-hashtag w-5 text-blue-400"></i> Number Memory</a>
                 </div>
                 <div class="border-t border-gray-800 pt-4">
-                    <button class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white px-8 py-2.5 rounded-xl font-bold text-sm transition">
+                    <button
+                        class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white px-8 py-2.5 rounded-xl font-bold text-sm transition">
                         Start Test
                     </button>
                 </div>
@@ -264,29 +302,37 @@
                 <!-- Heading -->
                 <div class="flex flex-col items-center text-center mb-6 sm:mb-10">
                     <h1 class="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight mb-2">
-                        Typing <span class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Speed</span>
+                        Typing <span
+                            class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Speed</span>
                     </h1>
                     <p class="text-sm sm:text-base text-gray-500 font-medium tracking-wide">
-                        Type the <span class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700 font-semibold">highlighted</span>
+                        Type the <span
+                            class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700 font-semibold">highlighted</span>
                         words as fast and accurately as you can.
                     </p>
                 </div>
 
                 <!-- Stat bar + Try Again -->
                 <div class="flex items-center justify-between gap-2 mb-4 sm:mb-5">
-                    <div class="flex items-stretch bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shrink-0">
+                    <div
+                        class="flex items-stretch bg-gray-900 border border-gray-800 rounded-xl overflow-hidden shrink-0">
                         <div class="flex flex-col items-center justify-center px-3 sm:px-6 py-2.5 gap-0.5">
-                            <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">WPM</p>
+                            <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">WPM
+                            </p>
                             <p id="stat-wpm" class="text-sm sm:text-lg font-black text-white">--</p>
                         </div>
                         <div class="w-px bg-gray-800"></div>
                         <div class="flex flex-col items-center justify-center px-3 sm:px-6 py-2.5 gap-0.5">
-                            <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Best</p>
-                            <p id="stat-best" class="text-sm sm:text-lg font-black text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-600">--</p>
+                            <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Best
+                            </p>
+                            <p id="stat-best"
+                                class="text-sm sm:text-lg font-black text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-600">
+                                --</p>
                         </div>
                         <div class="w-px bg-gray-800"></div>
                         <div class="flex flex-col items-center justify-center px-3 sm:px-6 py-2.5 gap-0.5">
-                            <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Accuracy</p>
+                            <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">
+                                Accuracy</p>
                             <p id="stat-accuracy" class="text-sm sm:text-lg font-black text-white">--%</p>
                         </div>
                     </div>
@@ -312,7 +358,8 @@
                             autocapitalize="off" spellcheck="false"></textarea>
 
                         <!-- STATE: No Keyboard — JS shows this on touch-only devices -->
-                        <div id="state-no-keyboard" class="hidden flex-col items-center justify-center gap-6 absolute inset-0 px-8">
+                        <div id="state-no-keyboard"
+                            class="hidden flex-col items-center justify-center gap-6 absolute inset-0 px-8">
 
                             <div id="no-kb-icon-wrap" class="relative flex items-center justify-center">
                                 <!-- Soft ping ring -->
@@ -322,23 +369,24 @@
                                 <div id="no-kb-card"
                                     class="relative z-10 flex items-center justify-center w-[72px] h-[72px] rounded-2xl border border-blue-900/50 bg-gray-900">
                                     <!-- Keyboard with slash -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-9 h-9" viewBox="0 0 24 24" fill="none">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-9 h-9" viewBox="0 0 24 24"
+                                        fill="none">
                                         <!-- keyboard body -->
-                                        <rect x="2" y="6" width="20" height="12" rx="2"
-                                            stroke="#3b82f6" stroke-width="1.5" fill="none"/>
+                                        <rect x="2" y="6" width="20" height="12" rx="2" stroke="#3b82f6"
+                                            stroke-width="1.5" fill="none" />
                                         <!-- top row keys -->
-                                        <circle cx="6"  cy="10" r="0.8" fill="#3b82f6"/>
-                                        <circle cx="9"  cy="10" r="0.8" fill="#3b82f6"/>
-                                        <circle cx="12" cy="10" r="0.8" fill="#3b82f6"/>
-                                        <circle cx="15" cy="10" r="0.8" fill="#3b82f6"/>
-                                        <circle cx="18" cy="10" r="0.8" fill="#3b82f6"/>
+                                        <circle cx="6" cy="10" r="0.8" fill="#3b82f6" />
+                                        <circle cx="9" cy="10" r="0.8" fill="#3b82f6" />
+                                        <circle cx="12" cy="10" r="0.8" fill="#3b82f6" />
+                                        <circle cx="15" cy="10" r="0.8" fill="#3b82f6" />
+                                        <circle cx="18" cy="10" r="0.8" fill="#3b82f6" />
                                         <!-- bottom row: two keys + spacebar -->
-                                        <circle cx="6"  cy="14" r="0.8" fill="#3b82f6"/>
-                                        <circle cx="9"  cy="14" r="0.8" fill="#3b82f6"/>
-                                        <rect x="11" y="13.2" width="7" height="1.6" rx="0.8" fill="#3b82f6"/>
+                                        <circle cx="6" cy="14" r="0.8" fill="#3b82f6" />
+                                        <circle cx="9" cy="14" r="0.8" fill="#3b82f6" />
+                                        <rect x="11" y="13.2" width="7" height="1.6" rx="0.8" fill="#3b82f6" />
                                         <!-- red diagonal slash -->
-                                        <line x1="3.5" y1="3.5" x2="20.5" y2="20.5"
-                                            stroke="#ef4444" stroke-width="1.8" stroke-linecap="round"/>
+                                        <line x1="3.5" y1="3.5" x2="20.5" y2="20.5" stroke="#ef4444" stroke-width="1.8"
+                                            stroke-linecap="round" />
                                     </svg>
                                 </div>
                             </div>
@@ -353,7 +401,8 @@
                             </div>
 
                             <!-- Tip pill -->
-                            <div class="flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-blue-900/40 bg-blue-950/30">
+                            <div
+                                class="flex items-center gap-2.5 px-4 py-2.5 rounded-xl border border-blue-900/40 bg-blue-950/30">
                                 <i class="fa-solid fa-desktop text-blue-500 text-xs shrink-0"></i>
                                 <p class="text-gray-400 text-xs font-medium">
                                     Open on a desktop or laptop for the full experience
@@ -366,10 +415,18 @@
                         <div id="state-idle" class="flex flex-col items-center justify-center gap-4 absolute inset-0">
                             <!-- Time selector -->
                             <div class="flex items-center gap-1 bg-gray-900 border border-gray-800 rounded-lg p-1">
-                                <button class="time-opt px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-white hover:bg-gray-800 transition-all" data-time="15">15s</button>
-                                <button class="time-opt active px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest bg-gray-800 text-white transition-all"                 data-time="30">30s</button>
-                                <button class="time-opt px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-white hover:bg-gray-800 transition-all" data-time="60">60s</button>
-                                <button class="time-opt px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-white hover:bg-gray-800 transition-all" data-time="120">120s</button>
+                                <button
+                                    class="time-opt px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-white hover:bg-gray-800 transition-all"
+                                    data-time="15">15s</button>
+                                <button
+                                    class="time-opt active px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest bg-gray-800 text-white transition-all"
+                                    data-time="30">30s</button>
+                                <button
+                                    class="time-opt px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-white hover:bg-gray-800 transition-all"
+                                    data-time="60">60s</button>
+                                <button
+                                    class="time-opt px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-gray-500 hover:text-white hover:bg-gray-800 transition-all"
+                                    data-time="120">120s</button>
                             </div>
                             <p class="text-gray-500 text-sm font-medium tracking-wide flex items-center gap-2">
                                 <i class="fa-regular fa-keyboard text-gray-600"></i>
@@ -382,7 +439,8 @@
                             <div class="flex items-baseline gap-1.5">
                                 <span id="timer-display"
                                     class="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700 tabular-nums leading-none select-none">--</span>
-                                <span class="text-xs font-bold uppercase tracking-widest text-gray-600 select-none">sec</span>
+                                <span
+                                    class="text-xs font-bold uppercase tracking-widest text-gray-600 select-none">sec</span>
                             </div>
                             <div id="word-area">
                                 <div id="word-inner"></div>
@@ -396,33 +454,45 @@
                         <div id="state-result" class="hidden flex-col items-center text-center gap-5 w-full">
                             <div class="flex flex-col items-center gap-1">
                                 <p id="result-wpm"
-                                    class="text-7xl sm:text-8xl lg:text-9xl font-black text-white tabular-nums tracking-tighter leading-none">0</p>
-                                <p class="text-xs font-semibold uppercase tracking-widest text-gray-500">Words Per Minute</p>
+                                    class="text-7xl sm:text-8xl lg:text-9xl font-black text-white tabular-nums tracking-tighter leading-none">
+                                    0</p>
+                                <p class="text-xs font-semibold uppercase tracking-widest text-gray-500">Words Per
+                                    Minute</p>
                             </div>
-                            <div class="flex items-stretch bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+                            <div
+                                class="flex items-stretch bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
                                 <div class="flex flex-col items-center justify-center px-4 sm:px-7 py-3 gap-0.5">
-                                    <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Accuracy</p>
+                                    <p
+                                        class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">
+                                        Accuracy</p>
                                     <p id="result-accuracy" class="text-base sm:text-xl font-black text-white">0%</p>
                                 </div>
                                 <div class="w-px bg-gray-800"></div>
                                 <div class="flex flex-col items-center justify-center px-4 sm:px-7 py-3 gap-0.5">
-                                    <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Correct</p>
+                                    <p
+                                        class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">
+                                        Correct</p>
                                     <p id="result-correct" class="text-base sm:text-xl font-black text-white">0</p>
                                 </div>
                                 <div class="w-px bg-gray-800"></div>
                                 <div class="flex flex-col items-center justify-center px-4 sm:px-7 py-3 gap-0.5">
-                                    <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Errors</p>
+                                    <p
+                                        class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">
+                                        Errors</p>
                                     <p id="result-errors" class="text-base sm:text-xl font-black text-red-400">0</p>
                                 </div>
                                 <div class="w-px bg-gray-800"></div>
                                 <div class="flex flex-col items-center justify-center px-4 sm:px-7 py-3 gap-0.5">
-                                    <p class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">Time</p>
+                                    <p
+                                        class="text-[9px] sm:text-[10px] font-bold uppercase tracking-widest text-gray-600">
+                                        Time</p>
                                     <p id="result-time" class="text-base sm:text-xl font-black text-white">0s</p>
                                 </div>
                             </div>
                             <span id="perf-badge"
                                 class="px-5 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border border-blue-900 bg-blue-950 text-blue-400">Good</span>
-                            <p class="text-gray-600 text-xl font-semibold uppercase tracking-widest animate-pulse select-none">
+                            <p
+                                class="text-gray-600 text-xl font-semibold uppercase tracking-widest animate-pulse select-none">
                                 Tab or Try Again to restart</p>
                         </div>
 
@@ -440,7 +510,8 @@
                 <div class="lg:col-span-4 space-y-6">
                     <div class="flex items-center space-x-2">
                         <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                        <span class="text-white font-bold tracking-widest uppercase text-xs">System Status: Online</span>
+                        <span class="text-white font-bold tracking-widest uppercase text-xs">System Status:
+                            Online</span>
                     </div>
                     <h2 class="text-2xl font-bold text-white">Human Metrix</h2>
                     <p class="text-gray-500 text-sm leading-relaxed max-w-xs">A data-driven platform designed to
@@ -450,20 +521,29 @@
                     <div>
                         <h3 class="text-white text-sm font-bold mb-6 uppercase tracking-widest">Benchmarks</h3>
                         <ul class="space-y-4 text-sm">
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Reaction Time</a></li>
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Mind Grid</a></li>
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Typing Speed</a></li>
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Aim Trainer</a></li>
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Visual Memory</a></li>
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Number Memory</a></li>
+                            <li><a href="ReactionTime.html"
+                                    class="text-gray-500 hover:text-blue-400 transition-colors">Reaction Time</a></li>
+                            <li><a href="MindGrid.html" class="text-gray-500 hover:text-blue-400 transition-colors">Mind
+                                    Grid</a></li>
+                            <li><a href="TypingSpeed.html"
+                                    class="text-gray-500 hover:text-blue-400 transition-colors">Typing Speed</a></li>
+                            <li><a href="AimTrainer.html"
+                                    class="text-gray-500 hover:text-blue-400 transition-colors">Aim Trainer</a></li>
+                            <li><a href="VisualMemory.html"
+                                    class="text-gray-500 hover:text-blue-400 transition-colors">Visual Memory</a></li>
+                            <li><a href="NumberMemory.html"
+                                    class="text-gray-500 hover:text-blue-400 transition-colors">Number Memory</a></li>
                         </ul>
                     </div>
                     <div>
                         <h3 class="text-white text-sm font-bold mb-6 uppercase tracking-widest">Platform</h3>
                         <ul class="space-y-4 text-sm">
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Leaderboards</a></li>
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Global Stats</a></li>
-                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">API Access</a></li>
+                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Leaderboards</a>
+                            </li>
+                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Global Stats</a>
+                            </li>
+                            <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">API Access</a>
+                            </li>
                             <li><a href="#" class="text-gray-500 hover:text-blue-400 transition-colors">Privacy</a></li>
                         </ul>
                     </div>
@@ -481,17 +561,28 @@
                 </div>
             </div>
             <div class="border-t border-gray-900 pt-10 flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="text-gray-600 text-[11px] uppercase tracking-widest font-medium">© 2026 Human Metrix // All Rights Reserved</div>
+                <div class="text-gray-600 text-[11px] uppercase tracking-widest font-medium">© 2026 Human Metrix // All
+                    Rights Reserved</div>
                 <div class="flex items-center space-x-3">
-                    <a href="#" class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group" aria-label="Twitter / X">
+                    <a href="#"
+                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+                        aria-label="Twitter / X">
                         <i class="fa-brands fa-x-twitter text-gray-500 group-hover:text-white text-sm"></i></a>
-                    <a href="#" class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group" aria-label="Discord">
+                    <a href="#"
+                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+                        aria-label="Discord">
                         <i class="fa-brands fa-discord text-gray-500 group-hover:text-white text-sm"></i></a>
-                    <a href="#" class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group" aria-label="GitHub">
+                    <a href="#"
+                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+                        aria-label="GitHub">
                         <i class="fa-brands fa-github text-gray-500 group-hover:text-white text-sm"></i></a>
-                    <a href="#" class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group" aria-label="Instagram">
+                    <a href="#"
+                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+                        aria-label="Instagram">
                         <i class="fa-brands fa-instagram text-gray-500 group-hover:text-white text-sm"></i></a>
-                    <a href="#" class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group" aria-label="Facebook">
+                    <a href="#"
+                        class="p-2.5 bg-gray-900 border border-gray-800 rounded-md hover:bg-blue-600 hover:border-blue-600 transition-all duration-200 group"
+                        aria-label="Facebook">
                         <i class="fa-brands fa-facebook text-gray-500 group-hover:text-white text-sm"></i></a>
                 </div>
             </div>
