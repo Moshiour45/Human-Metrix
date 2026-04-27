@@ -174,108 +174,178 @@
 
 <body class="bg-gray-950 text-gray-300 flex flex-col min-h-screen font-sans selection:bg-blue-500/30">
 
-
-
-
     <!-- ═══════════════════════════ NAVBAR ═══════════════════════════ -->
+
     <header class="bg-gray-900/80 backdrop-blur-md border-b border-gray-800 sticky top-0 z-50">
+
         <div class="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-4">
 
             <!-- Logo -->
+
             <div class="flex items-center shrink-0">
+
                 <a href="../index.html" class="flex items-center group">
+
                     <img src="../Images/logo.png" alt="Human Metrix Logo"
+
                         class="h-8 md:h-10 w-auto transition-all duration-300 group-hover:drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]">
+
                     <h1 class="ml-2 md:ml-3 text-base md:text-xl font-bold text-white tracking-tight whitespace-nowrap">
+
                         Human <span
+
                             class="text-transparent bg-clip-text bg-gradient-to-b from-blue-400 to-blue-700">Metrix</span>
+
                     </h1>
+
                 </a>
+
             </div>
 
             <!-- Desktop Nav -->
-            <nav id="desktop-nav" class="items-center gap-x-5 text-sm font-medium text-gray-300">
+
+            <nav id="desktop-nav"
+
+                class="hidden md:flex items-center gap-x-5 text-sm font-medium text-gray-300">
+
                 <a href="../index.html" class="hover:text-blue-400 transition whitespace-nowrap">Home</a>
+
                 <a href="ReactionTime.html" class="hover:text-blue-400 transition whitespace-nowrap">Reaction Time</a>
+
                 <a href="MindGrid.html" class="hover:text-blue-400 transition whitespace-nowrap">Mind Grid</a>
+
                 <a href="TypingSpeed.html" class="hover:text-blue-400 transition whitespace-nowrap">Typing Speed</a>
+
                 <a href="AimTrainer.html" class="hover:text-blue-400 transition whitespace-nowrap">Aim Trainer</a>
+
                 <a href="VisualMemory.html" class="hover:text-blue-400 transition whitespace-nowrap">Visual Memory</a>
+
                 <a href="NumberMemory.html" class="hover:text-blue-400 transition whitespace-nowrap">Number Memory</a>
+
             </nav>
 
             <!-- Right: CTA + hamburger -->
+
             <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+
+                <!-- CTA -->
+
                 <button id="start-btn-desktop"
-                    class="bg-blue-600 hover:bg-blue-500 text-white px-4 sm:px-5 py-2 rounded-full text-sm font-semibold transition shadow-lg shadow-blue-900/20 whitespace-nowrap"
+
+                    class="hidden sm:block bg-blue-600 hover:bg-blue-500 text-white px-4 sm:px-5 py-2 rounded-full text-sm font-semibold transition shadow-lg shadow-blue-900/20 whitespace-nowrap"
+
                     onclick="startGame()">
+
                     Start Test
+
                 </button>
+
+                <!-- Hamburger -->
 
                 <button id="menu-toggle"
-                    class="flex flex-col justify-center items-center gap-[5px] w-9 h-9 p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none transition-colors">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
+
+                    class="md:hidden flex flex-col justify-center items-center gap-[5px] w-9 h-9 p-1.5 rounded-md text-gray-400 hover:text-white hover:bg-gray-800 focus:outline-none transition-colors">
+
+                    <span class="bar w-5 h-[2px] bg-current transition-all"></span>
+
+                    <span class="bar w-5 h-[2px] bg-current transition-all"></span>
+
+                    <span class="bar w-5 h-[2px] bg-current transition-all"></span>
+
                 </button>
+
             </div>
+
         </div>
 
-        <!-- Mobile dropdown -->
-        <div id="mobile-menu" class="bg-gray-900/95 backdrop-blur-md border-b border-gray-800">
+        <!-- Mobile Menu -->
+
+        <div id="mobile-menu"
+
+            class="hidden bg-gray-900/95 backdrop-blur-md border-b border-gray-800">
+
             <div class="container mx-auto px-4 sm:px-6 py-5">
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 mb-5">
 
                     <!-- Home -->
+
                     <a href="../index.html"
-                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+
+                        class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium sm:col-span-2">
+
                         <i class="fa-solid fa-house w-5 text-blue-400"></i> Home
+
                     </a>
 
-                    <!-- Other links -->
                     <a href="ReactionTime.html"
+
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+
                         <i class="fa-solid fa-bolt-lightning w-5 text-blue-400"></i> Reaction Time
+
                     </a>
 
                     <a href="MindGrid.html"
+
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+
                         <i class="fa-solid fa-brain w-5 text-blue-400"></i> Mind Grid
+
                     </a>
 
                     <a href="TypingSpeed.html"
+
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+
                         <i class="fa-regular fa-keyboard w-5 text-blue-400"></i> Typing Speed
+
                     </a>
 
                     <a href="AimTrainer.html"
+
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+
                         <i class="fa-solid fa-crosshairs w-5 text-blue-400"></i> Aim Trainer
+
                     </a>
 
                     <a href="VisualMemory.html"
+
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+
                         <i class="fa-solid fa-eye w-5 text-blue-400"></i> Visual Memory
+
                     </a>
 
                     <a href="NumberMemory.html"
+
                         class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-800 hover:text-blue-400 transition text-sm font-medium">
+
                         <i class="fa-solid fa-hashtag w-5 text-blue-400"></i> Number Memory
+
                     </a>
 
                 </div>
 
                 <!-- Mobile CTA -->
+
                 <div class="border-t border-gray-800 pt-4">
+
                     <button onclick="startGame()"
+
                         class="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white px-8 py-2.5 rounded-xl font-bold text-sm transition">
+
                         Start Test
+
                     </button>
+
                 </div>
 
             </div>
+
         </div>
+
     </header>
 
     <!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
