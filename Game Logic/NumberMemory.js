@@ -1,136 +1,171 @@
 // ── constants ──────────────────────────────────────────────────
-        const CIRC     = 2 * Math.PI * 90;
-        const MIN_TIME = 1500;
+const CIRC     = 2 * Math.PI * 90;
+const MIN_TIME = 1500;
 
-        // ── state ──────────────────────────────────────────────────────
-        let level, currentNum, ringTimer, elapsed, duration, lastCorrect;
+// ── state ──────────────────────────────────────────────────────
+let level, currentNum, ringTimer, elapsed, duration, lastCorrect;
 
-        // ── helpers ────────────────────────────────────────────────────
-        function showState(id) {
-            document.querySelectorAll('.state').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
+// ── helpers ────────────────────────────────────────────────────
+function showState(id) {
+    document.querySelectorAll('.state').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
 
-        function genNumber(digits) {
-            let n = String(Math.floor(Math.random() * 9) + 1);
-            for (let i = 1; i < digits; i++) n += String(Math.floor(Math.random() * 10));
-            return n;
-        }
+function genNumber(digits) {
+    let n = String(Math.floor(Math.random() * 9) + 1);
+    for (let i = 1; i < digits; i++) {
+        n += String(Math.floor(Math.random() * 10));
+    }
+    return n;
+}
 
-        function getDuration(lvl) {
-            return Math.max(MIN_TIME, 3000 - (lvl - 1) * 100);
-        }
+function getDuration(lvl) {
+    return Math.max(MIN_TIME, 3000 - (lvl - 1) * 100);
+}
 
-        // ── phases ─────────────────────────────────────────────────────
-        function startGame() {
-            level = 1;
+// ── phases ─────────────────────────────────────────────────────
+function startGame() {
+    level = 1;
+    clearInterval(ringTimer);
+    showState('s-memorize');
+    startMemorize();
+}
+
+function startMemorize() {
+    currentNum = genNumber(level);
+    duration   = getDuration(level);
+    elapsed    = 0;
+
+    document.getElementById('mem-level-lbl').textContent = 'Level ' + level;
+    document.getElementById('display-num').textContent   = currentNum;
+
+    const prog = document.getElementById('ring-prog');
+    prog.style.strokeDasharray  = CIRC;
+    prog.style.strokeDashoffset = 0;
+
+    clearInterval(ringTimer);
+    const STEP = 50;
+
+    ringTimer = setInterval(() => {
+        elapsed += STEP;
+        prog.style.strokeDashoffset = CIRC * (elapsed / duration);
+
+        if (elapsed >= duration) {
             clearInterval(ringTimer);
-            showState('s-memorize');
-            startMemorize();
+            startRecall();
         }
+    }, STEP);
+}
 
-        function startMemorize() {
-            currentNum = genNumber(level);
-            duration   = getDuration(level);
-            elapsed    = 0;
+function startRecall() {
+    document.getElementById('rec-level-lbl').textContent = 'Level ' + level;
+    document.getElementById('inp-num').value = '';
 
-            document.getElementById('mem-level-lbl').textContent = 'Level ' + level;
-            document.getElementById('display-num').textContent   = currentNum;
+    showState('s-recall');
 
-            const prog = document.getElementById('ring-prog');
-            prog.style.strokeDasharray  = CIRC;
-            prog.style.strokeDashoffset = 0;
+    setTimeout(() => {
+        document.getElementById('inp-num').focus();
+    }, 80);
+}
 
-            clearInterval(ringTimer);
-            const STEP = 50;
-            ringTimer = setInterval(() => {
-                elapsed += STEP;
-                prog.style.strokeDashoffset = CIRC * (elapsed / duration);
-                if (elapsed >= duration) {
-                    clearInterval(ringTimer);
-                    startRecall();
-                }
-            }, STEP);
-        }
+function submitAnswer() {
+    const val = document.getElementById('inp-num').value.trim();
+    if (!val) return;
 
-        function startRecall() {
-            document.getElementById('rec-level-lbl').textContent = 'Level ' + level;
-            document.getElementById('inp-num').value = '';
-            showState('s-recall');
-            setTimeout(() => document.getElementById('inp-num').focus(), 80);
-        }
+    lastCorrect = (val === currentNum);
+    showFeedback(lastCorrect);
+}
 
-        function submitAnswer() {
-            const val = document.getElementById('inp-num').value.trim();
-            if (!val) return;
-            lastCorrect = (val === currentNum);
-            showFeedback(lastCorrect);
-        }
+function showFeedback(isCorrect) {
+    const icon    = document.getElementById('feedback-icon');
+    const title   = document.getElementById('feedback-title');
+    const detail  = document.getElementById('feedback-detail');
+    const numDisp = document.getElementById('feedback-correct');
+    const btn     = document.getElementById('btn-next');
 
-        function showFeedback(isCorrect) {
-            const icon    = document.getElementById('feedback-icon');
-            const title   = document.getElementById('feedback-title');
-            const detail  = document.getElementById('feedback-detail');
-            const numDisp = document.getElementById('feedback-correct');
-            const btn     = document.getElementById('btn-next');
+    numDisp.textContent = currentNum;
 
-            numDisp.textContent = currentNum;
+    if (isCorrect) {
+        icon.textContent   = '✓';
+        icon.style.color   = '#34d399';
+        title.textContent  = 'Correct!';
+        detail.textContent = 'Moving to level ' + (level + 1);
+        numDisp.className  = 'correct-flash';
+        btn.textContent    = 'Next Level →';
+        btn.className      = 'btn-continue';
+    } else {
+        icon.textContent   = '✗';
+        icon.style.color   = '#f87171';
+        title.textContent  = 'Incorrect';
+        detail.textContent = 'The correct number was:';
+        numDisp.className  = 'wrong-flash';
+        btn.textContent    = 'See Results';
+        btn.className      = 'btn-retry';
+    }
 
-            if (isCorrect) {
-                icon.textContent   = '✓';
-                icon.style.color   = '#34d399';
-                title.textContent  = 'Correct!';
-                detail.textContent = 'Moving to level ' + (level + 1);
-                numDisp.className  = 'correct-flash';
-                btn.textContent    = 'Next Level →';
-                btn.className      = 'btn-continue';
-            } else {
-                icon.textContent   = '✗';
-                icon.style.color   = '#f87171';
-                title.textContent  = 'Incorrect';
-                detail.textContent = 'The correct number was:';
-                numDisp.className  = 'wrong-flash';
-                btn.textContent    = 'See Results';
-                btn.className      = 'btn-retry';
-            }
+    showState('s-feedback');
+}
 
-            showState('s-feedback');
-        }
+function advanceFromFeedback() {
+    if (lastCorrect) {
+        level++;
+        showState('s-memorize');
+        startMemorize();
+    } else {
+        showGameOver();
+    }
+}
 
-        function advanceFromFeedback() {
-            if (lastCorrect) {
-                level++;
-                showState('s-memorize');
-                startMemorize();
-            } else {
-                showGameOver();
-            }
-        }
+function showGameOver() {
+    document.getElementById('go-level').textContent  = level;
+    document.getElementById('go-digits').textContent = level;
+    document.getElementById('go-missed').textContent = currentNum;
 
-        function showGameOver() {
-            document.getElementById('go-level').textContent  = level;
-            document.getElementById('go-digits').textContent = level;
-            document.getElementById('go-missed').textContent = currentNum;
-            showState('s-gameover');
-        }
+    showState('s-gameover');
+}
 
-        // ── event listeners ────────────────────────────────────────────
-        document.getElementById('btn-start').addEventListener('click', startGame);
+// ── event listeners ────────────────────────────────────────────
+document.getElementById('btn-start').addEventListener('click', startGame);
+document.getElementById('btn-submit').addEventListener('click', submitAnswer);
 
-        document.getElementById('btn-submit').addEventListener('click', submitAnswer);
+document.getElementById('inp-num').addEventListener('keydown', e => {
+    if (e.key === 'Enter') submitAnswer();
+});
 
-        document.getElementById('inp-num').addEventListener('keydown', e => {
-            if (e.key === 'Enter') submitAnswer();
-        });
+document.getElementById('btn-next').addEventListener('click', advanceFromFeedback);
+document.getElementById('btn-restart').addEventListener('click', startGame);
 
-        document.getElementById('btn-next').addEventListener('click', advanceFromFeedback);
 
-        document.getElementById('btn-restart').addEventListener('click', startGame);
+// ═══════════════════════════════════════════════════════════════
+//  FIXED HAMBURGER MENU
+// ═══════════════════════════════════════════════════════════════
 
-        // ── hamburger ──────────────────────────────────────────────────
-        const menuToggle = document.getElementById('menu-toggle');
-        const mobileMenu = document.getElementById('mobile-menu');
-        menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('open');
-            mobileMenu.classList.toggle('open');
-        });
+const menuToggle = document.getElementById('menu-toggle');
+const mobileMenu = document.getElementById('mobile-menu');
+
+// Toggle menu
+menuToggle.addEventListener('click', () => {
+    mobileMenu.classList.toggle('hidden');  // correct Tailwind toggle
+    menuToggle.classList.toggle('open');    // optional animation hook
+});
+
+// Close when clicking a link
+document.querySelectorAll('#mobile-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+    });
+});
+
+// Close when clicking outside
+document.addEventListener('click', (e) => {
+    if (!menuToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
+        mobileMenu.classList.add('hidden');
+    }
+});
+
+// Close on ESC key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        mobileMenu.classList.add('hidden');
+    }
+});
